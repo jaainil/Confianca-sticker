@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sticker Press — Number Stickers & Ampoule Labels for A4</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232738; --paper:#fff; --bg:#EDF1F8;
+    --yellow:#FFC531; --pink:#FF6FA5; --blue:#4CC9F0; --green:#57CC99; --purple:#9B5DE5;
+    --shadow:6px 6px 0 rgba(35,39,56,.92);
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',sans-serif; color:var(--ink); background:var(--bg);
+    background-image:radial-gradient(#CBD5E6 1.3px, transparent 1.3px);
+    background-size:22px 22px;
+  }
+  .float{position:fixed; z-index:0; opacity:.55; pointer-events:none; animation:bob 6s ease-in-out infinite alternate}
+  .float svg{display:block; filter:drop-shadow(3px 4px 0 rgba(35,39,56,.18))}
+  .f1{top:9%; left:2%; transform:rotate(-12deg)}
+  .f2{bottom:12%; left:4%; transform:rotate(10deg); animation-delay:-2s}
+  .f3{top:16%; right:3%; transform:rotate(14deg); animation-delay:-4s}
+  .f4{bottom:8%; right:5%; transform:rotate(-8deg); animation-delay:-1s}
+  @keyframes bob{from{translate:0 0}to{translate:0 -16px}}
+  @media(max-width:1100px){.float{display:none}}
+
+  .wrap{max-width:1220px; margin:0 auto; padding:22px; position:relative; z-index:1}
+
+  header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:20px}
+  .brand{display:flex; align-items:center; gap:14px}
+  .logo{width:58px; height:58px; transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+  .logo:hover{transform:rotate(-14deg) scale(1.1)}
+  h1{font-family:'Bungee'; font-size:clamp(26px,4.5vw,42px); letter-spacing:1px; line-height:1}
+  h1 em{font-style:normal; color:var(--pink); text-shadow:2px 2px 0 rgba(35,39,56,.15)}
+  .tagline{font-weight:800; font-size:13px; color:#5A6277; margin-top:4px}
+  .chip{background:var(--yellow); border:2.5px solid var(--ink); border-radius:999px;
+    padding:7px 16px; font-weight:900; font-size:13px; box-shadow:3px 3px 0 var(--ink)}
+
+  main.layout{display:grid; grid-template-columns:360px 1fr; gap:22px; align-items:start}
+  @media(max-width:960px){main.layout{grid-template-columns:1fr}}
+  .panel{background:var(--paper); border:2.5px solid var(--ink); border-radius:20px; box-shadow:var(--shadow)}
+
+  .controls{padding:20px}
+  .controls section{padding:14px 0}
+  .controls section + section{border-top:2px dashed #DCE2EE}
+  .lbl{font-size:11px; font-weight:900; letter-spacing:.16em; text-transform:uppercase; color:#5A6277;
+       display:flex; align-items:center; gap:8px; margin-bottom:12px}
+  .lbl::before{content:""; width:11px; height:11px; border-radius:4px; border:2px solid var(--ink); transform:rotate(8deg); background:var(--yellow)}
+  section:nth-of-type(2) .lbl::before{background:var(--pink)}
+  section:nth-of-type(3) .lbl::before{background:var(--blue)}
+  section:nth-of-type(4) .lbl::before{background:var(--green)}
+  section:nth-of-type(5) .lbl::before{background:var(--purple)}
+
+  .presetRow{display:flex; align-items:center; gap:10px; padding-bottom:14px; border-bottom:2px dashed #DCE2EE}
+  .preset{background:var(--blue); border:2.5px solid var(--ink); border-radius:999px; padding:8px 16px;
+    font:900 13px 'Nunito'; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
+    transition:transform .14s, box-shadow .14s; color:#fff}
+  .preset:hover{transform:translate(-1px,-2px) rotate(-2deg); box-shadow:5px 5px 0 var(--ink)}
+  .preset:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
+  .presetNote{font-size:11px; font-weight:800; color:#8A91A5; line-height:1.3}
+
+  .numrow{display:grid; grid-template-columns:1fr 26px 1fr; gap:8px; align-items:end}
+  .field label{display:block; font-size:12px; font-weight:900; margin-bottom:5px; color:#454B5E}
+  .field input{width:100%; font:800 22px 'Nunito'; padding:9px 12px; border:2.5px solid var(--ink);
+    border-radius:12px; background:#fff; transition:box-shadow .15s}
+  .field input:focus{outline:none; box-shadow:0 0 0 3px var(--yellow)}
+  .arrow{font-size:24px; font-weight:900; text-align:center; padding-bottom:8px}
+
+  .sliderrow{display:flex; align-items:center; gap:8px}
+  .stepBtn{width:34px; height:34px; flex:none; border:2.5px solid var(--ink); border-radius:10px;
+    background:var(--yellow); font:900 20px 'Nunito'; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
+    display:grid; place-items:center; padding-bottom:3px; user-select:none;
+    transition:transform .12s, box-shadow .12s, background .12s}
+  .stepBtn:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink); background:#FFD25E}
+  .stepBtn:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
+  input[type=range]{flex:1; -webkit-appearance:none; height:10px; border-radius:99px;
+    background:#E3E8F2; border:2px solid var(--ink); cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%;
+    background:var(--yellow); border:2.5px solid var(--ink); box-shadow:2px 2px 0 var(--ink); transition:transform .15s}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+  input[type=range]::-moz-range-thumb{width:22px; height:22px; border-radius:50%;
+    background:var(--yellow); border:2.5px solid var(--ink)}
+  .sizeval{font-weight:900; font-size:14px; background:#EAF7FF; border:2px solid var(--ink); border-radius:999px; padding:4px 11px; white-space:nowrap}
+  .cap{font-size:12px; font-weight:800; color:#6B7387; margin-top:9px}
+  .cap b{color:var(--ink)}
+
+  .tiles{display:grid; grid-template-columns:repeat(5,1fr); gap:7px}
+  .tile{border:2.5px solid var(--ink); border-radius:12px; background:#fff; padding:9px 2px 6px; cursor:pointer;
+    display:grid; place-items:center; gap:3px; transition:transform .16s, background .16s}
+  .tile svg{width:30px; height:22px}
+  .tile span{font-size:9.5px; font-weight:900}
+  .tile:hover{transform:translateY(-3px) rotate(-2deg)}
+  .tile.sel{background:var(--yellow); transform:rotate(-3deg); box-shadow:3px 3px 0 var(--ink)}
+
+  .swrow{display:flex; gap:11px; flex-wrap:wrap}
+  .sw{width:36px; height:36px; border-radius:50%; border:2.5px solid var(--ink); cursor:pointer;
+      transition:transform .16s}
+  .sw:hover{transform:scale(1.18) rotate(8deg)}
+  .sw.sel{box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--ink); transform:scale(1.1)}
+
+  .fontrow{display:flex; gap:8px}
+  .fontbtn{flex:1; border:2.5px solid var(--ink); border-radius:12px; background:#fff; padding:8px 4px;
+    cursor:pointer; text-align:center; transition:transform .16s, background .16s}
+  .fontbtn b{display:block; font-size:21px; line-height:1.15}
+  .fontbtn span{font-size:10px; font-weight:900; color:#6B7387}
+  .fontbtn:hover{transform:translateY(-3px)}
+  .fontbtn.sel{background:#DFF3FF; box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg)}
+
+  .toggles{display:grid; gap:11px}
+  .switch{display:flex; align-items:center; gap:11px; cursor:pointer; font-weight:800; font-size:14px}
+  .switch input{display:none}
+  .track{width:48px; height:27px; border:2.5px solid var(--ink); border-radius:999px; background:#E3E8F2;
+    position:relative; transition:background .2s; flex:none}
+  .knob{position:absolute; top:1.5px; left:2.5px; width:18px; height:18px; border-radius:50%;
+    background:#fff; border:2px solid var(--ink); transition:left .22s cubic-bezier(.3,1.5,.5,1)}
+  .switch input:checked + .track{background:var(--green)}
+  .switch input:checked + .track .knob{left:22px}
+
+  .actions{display:grid; gap:10px; padding-top:16px; border-top:2px dashed #DCE2EE}
+  .btn{font:900 15px 'Nunito'; border:2.5px solid var(--ink); border-radius:14px; padding:13px 16px;
+    cursor:pointer; background:#fff; box-shadow:4px 4px 0 var(--ink); display:flex; align-items:center;
+    justify-content:center; gap:9px; transition:transform .13s, box-shadow .13s}
+  .btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink)}
+  .btn:active{transform:translate(3px,3px); box-shadow:0 0 0 var(--ink)}
+  .btn.primary{background:var(--yellow)}
+  .btn svg{width:18px; height:18px}
+  .reset{background:none; border:none; font:800 12px 'Nunito'; color:#8A91A5; cursor:pointer;
+    text-decoration:underline dotted; justify-self:center}
+  .reset:hover{color:var(--pink)}
+
+  .preview{padding:16px; display:flex; flex-direction:column}
+  .pbar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:13px}
+  .pstats{font-weight:900; font-size:14px}
+  .pill{background:#FFF3CC; border:2px solid var(--ink); border-radius:999px; padding:3px 11px;
+    font-size:12px; font-weight:900; display:inline-block; margin-right:6px}
+  .previewScroll{flex:1; overflow:auto; border:2px dashed #C4CFE3; border-radius:16px;
+    padding:20px; background:#F6F9FE; min-height:65vh}
+  #fitBox{margin:0 auto}
+  #printRoot{transform-origin:top left}
+
+  .sheet{width:210mm; height:297mm; background:#fff; border:1px solid #E2E7F1; position:relative;
+    box-shadow:0 12px 26px rgba(35,39,56,.14); display:grid; margin-bottom:28px;
+    justify-content:center; align-content:center}
+  .sheetTag{position:absolute; top:-13px; left:14px; background:var(--pink); color:#fff;
+    border:2.5px solid var(--ink); border-radius:999px; padding:2px 12px; font-size:11px;
+    font-weight:900; transform:rotate(-3deg); box-shadow:2px 2px 0 var(--ink)}
+  .stk{position:relative}
+  .stk svg{width:100%; height:100%; display:block; filter:drop-shadow(0 1mm 1.2mm rgba(30,40,70,.18))}
+  .pop{animation:pop .5s cubic-bezier(.2,.9,.3,1.35) both}
+  @keyframes pop{0%{transform:scale(.2) rotate(-10deg); opacity:0} 70%{transform:scale(1.07)} 100%{transform:scale(1); opacity:1}}
+
+  .hint{margin-top:12px; font-size:12.5px; font-weight:700; color:#6B7387; text-align:center}
+  .hint b{color:var(--ink)}
+  footer{margin-top:26px; text-align:center; font-size:12px; font-weight:800; color:#9AA1B4}
+
+  #toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(90px);
+    background:var(--ink); color:#fff; font-weight:800; font-size:14px; padding:12px 22px;
+    border-radius:999px; box-shadow:4px 4px 0 rgba(35,39,56,.25); opacity:0; z-index:99;
+    transition:transform .35s cubic-bezier(.3,1.4,.5,1), opacity .3s; pointer-events:none}
+  #toast.show{transform:translateX(-50%) translateY(0); opacity:1}
+
+  @page{size:A4; margin:0}
+  @media print{
+    body{background:#fff}
+    header, aside, .pbar, .hint, footer, .float, #toast{display:none !important}
+    .wrap{max-width:none; padding:0}
+    main.layout{display:block}
+    .preview{border:none; box-shadow:none; padding:0; border-radius:0}
+    .previewScroll{overflow:visible; border:none; padding:0; background:none; min-height:0}
+    #fitBox{width:auto !important; height:auto !important; margin:0}
+    #printRoot{transform:none !important}
+    .sheet{box-shadow:none; border:none; margin:0; page-break-after:always; break-after:page;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .sheet:last-child{page-break-after:auto}
+    .sheetTag{display:none}
+    .stk svg{filter:none}
+    *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<div class="float f1"><svg width="54" height="54" viewBox="-8 -8 116 116"><path id="starDeco"/></svg></div>
+<div class="float f2"><svg width="48" height="48" viewBox="0 0 100 100"><path d="M50,86 C20,62 8,42 16,26 C23,12 40,12 50,26 C60,12 77,12 84,26 C92,42 80,62 50,86 Z" fill="#FF6FA5" stroke="#fff" stroke-width="6"/></svg></div>
+<div class="float f3"><svg width="52" height="52" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#57CC99" stroke="#fff" stroke-width="6"/><circle cx="35" cy="42" r="5" fill="#232738"/><circle cx="65" cy="42" r="5" fill="#232738"/><path d="M33,60 Q50,74 67,60" stroke="#232738" stroke-width="5" fill="none" stroke-linecap="round"/></svg></div>
+<div class="float f4"><svg width="46" height="46" viewBox="0 0 100 100"><path d="M56,6 L22,56 L44,56 L38,94 L78,40 L54,40 Z" fill="#FFC531" stroke="#fff" stroke-width="6" stroke-linejoin="round"/></svg></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="-8 -8 116 116"><path d="" fill="#FFC531" stroke="#fff" stroke-width="6" stroke-linejoin="round" id="logoStar"/><text x="50" y="53" text-anchor="middle" dominant-baseline="central" font-family="Bungee" font-size="34" fill="#232738">★</text></svg>
+      <div>
+        <h1>STICKER <em>PRESS</em></h1>
+        <div class="tagline">number stickers & ampoule labels → A4 sheets</div>
+      </div>
+    </div>
+    <div class="chip" id="chip">…</div>
+  </header>
+
+  <main class="layout">
+
+    <aside class="panel controls">
+
+      <div class="presetRow">
+        <button class="preset" id="ampoulePreset">🧪 Ampoule labels</button>
+        <span class="presetNote">quick setup:<br>rect · border only · dots · 30 mm</span>
+      </div>
+
+      <section>
+        <div class="lbl">Numbers from → to</div>
+        <div class="numrow">
+          <div class="field"><label for="from">FROM</label><input id="from" type="number" min="0" max="999" value="1"></div>
+          <div class="arrow">→</div>
+          <div class="field"><label for="to">TO</label><input id="to" type="number" min="0" max="999" value="30"></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="lbl">Sticker size (1 mm steps)</div>
+        <div class="sliderrow">
+          <button class="stepBtn" id="minus" title="-1 mm">−</button>
+          <input type="range" id="size" min="10" max="90" step="1" value="42">
+          <button class="stepBtn" id="plus" title="+1 mm">+</button>
+          <div class="sizeval" id="sizeVal">42 mm</div>
+        </div>
+        <div class="cap" id="capText"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Shape</div>
+        <div class="tiles" id="shapes"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Colors</div>
+        <div class="swrow" id="themes"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Number font</div>
+        <div class="fontrow" id="fonts"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Extras</div>
+        <div class="toggles">
+          <label class="switch"><input type="checkbox" id="dot"><span class="track"><span class="knob"></span></span> Dot after number (1. 2. 3.)</label>
+          <label class="switch"><input type="checkbox" id="outline"><span class="track"><span class="knob"></span></span> Border only (no fill)</label>
+          <label class="switch"><input type="checkbox" id="alt" checked><span class="track"><span class="knob"></span></span> Alternate colors</label>
+          <label class="switch"><input type="checkbox" id="guides" checked><span class="track"><span class="knob"></span></span> Cut guides</label>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button class="btn primary" id="printBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Save A4 page
+        </button>
+        <button class="btn" id="pngBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
+          Download PNG
+        </button>
+        <button class="reset" id="resetBtn">reset everything</button>
+      </div>
+    </aside>
+
+    <section class="panel preview">
+      <div class="pbar">
+        <div class="pstats" id="stats"></div>
+        <div><span class="pill" id="pillShape"></span><span class="pill" id="pillSize"></span></div>
+      </div>
+      <div class="previewScroll" id="scroll">
+        <div id="fitBox"><div id="printRoot"></div></div>
+      </div>
+      <div class="hint">💡 In the print dialog choose <b>“Save as PDF”</b>, paper <b>A4</b>, margins <b>none</b>, and enable <b>background graphics</b>.</div>
+    </section>
+
+  </main>
+
+  <footer>Made for sticker people & ampoules ✂ · every sheet is exactly 210 × 297 mm</footer>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const PXMM = 96 / 25.4;
+const PAGE_W = 210, PAGE_H = 297, MARGIN = 10, MAX_STICKERS = 800;
+const SIZE_MIN = 10, SIZE_MAX = 90;
+
+const THEMES = {
+  rainbow:  {name:'Rainbow',  colors:['#FF6B4A','#FFC531','#57CC99','#4CC9F0','#9B5DE5','#FF70A6']},
+  sunshine: {name:'Sunshine', colors:['#FFC531','#FF9E1B','#FFB800','#FFD97A']},
+  bubblegum:{name:'Bubblegum',colors:['#FF70A6','#FF9EC6','#F65C93','#FFC2DA']},
+  ocean:    {name:'Ocean',    colors:['#4CC9F0','#2D9CDB','#7BD5F5','#1B7FBF']},
+  forest:   {name:'Forest',   colors:['#57CC99','#80ED99','#2FA071','#B8F0C9']},
+  chalk:    {name:'Chalk',    colors:['#F4F1E8','#EDE9DC'], ring:'#DBD6C6'}
+};
+const FONTS = {
+  Fredoka:{family:'Fredoka', weight:600},
+  Bungee: {family:'Bungee',  weight:400},
+  Caveat: {family:'Caveat',  weight:700}
+};
+
+/* ---------- shape geometry ---------- */
+function starD(R=47,r=29){let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5;const rad=i%2?r:R;
+  p+=(i?'L':'M')+(50+rad*Math.cos(a)).toFixed(2)+','+(50+rad*Math.sin(a)).toFixed(2);}return p+'Z';}
+function hexD(R=45){let p='';for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3;
+  p+=(i?'L':'M')+(50+R*Math.cos(a)).toFixed(2)+','+(50+R*Math.sin(a)).toFixed(2);}return p+'Z';}
+const roundedD = 'M26,4 h48 a22,22 0 0 1 22,22 v48 a22,22 0 0 1 -22,22 h-48 a22,22 0 0 1 -22,-22 v-48 a22,22 0 0 1 22,-22 Z';
+const circleD  = 'M50,3.5 a46.5,46.5 0 1 0 0.01,0 Z';
+const rectD    = 'M21,3 h118 a18,18 0 0 1 18,18 v58 a18,18 0 0 1 -18,18 h-118 a18,18 0 0 1 -18,-18 v-58 a18,18 0 0 1 18,-18 Z';
+
+const SHAPES = {
+  rect:   {label:'Rect',   d:rectD,    cx:80, cy:50, w:160, h:100, vb:'-12 -12 184 124', ratio:0.625, fsf:1},
+  circle: {label:'Circle', d:circleD,  cx:50, cy:50, w:100, h:100, vb:'-10 -10 120 120', ratio:1,     fsf:1},
+  square: {label:'Square', d:roundedD, cx:50, cy:50, w:100, h:100, vb:'-10 -10 120 120', ratio:1,     fsf:1},
+  hex:    {label:'Hex',    d:hexD(),   cx:50, cy:50, w:100, h:100, vb:'-10 -10 120 120', ratio:1,     fsf:0.82},
+  star:   {label:'Star',   d:starD(),  cx:50, cy:50, w:100, h:100, vb:'-10 -10 120 120', ratio:1,     fsf:0.62}
+};
+const SHAPE_ORDER = ['rect','circle','square','hex','star'];
+
+const state = {from:1, to:30, size:42, shape:'rect', theme:'rainbow', font:'Fredoka',
+               alt:true, guides:true, outline:false, dot:false};
+let build = null;
+
+/* ---------- helpers ---------- */
+function inkFor(hex){
+  const n=parseInt(hex.slice(1),16), r=n>>16, g=n>>8&255, b=n&255;
+  return (r*299+g*587+b*114)/1000 >= 150 ? '#232738' : '#FFFFFF';
+}
+function toast(msg){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600);
+}
+function readRange(){
+  let f=parseInt($('#from').value,10), t=parseInt($('#to').value,10);
+  if(isNaN(f)) f=state.from; if(isNaN(t)) t=state.to;
+  f=Math.max(0,Math.min(999,f)); t=Math.max(0,Math.min(999,t));
+  if(f>t){[f,t]=[t,f]; $('#from').value=f; $('#to').value=t; toast('Swapped the range for you 🙂');}
+  if(t-f+1>MAX_STICKERS){ t=f+MAX_STICKERS-1; $('#to').value=t; toast('Capped at '+MAX_STICKERS+' stickers'); }
+  $('#from').value=f; $('#to').value=t;
+  state.from=f; state.to=t;
+}
+function cellDims(){
+  const s=SHAPES[state.shape];
+  return {cellW:state.size, cellH:+(state.size*s.ratio).toFixed(2)};
+}
+/* number label, with optional dot: "1." */
+function labelFor(n){ return state.dot ? n + '.' : String(n); }
+/* font size for a sticker; slightly smaller when the dot is on so it fits */
+function fontSize(n, spec){
+  const digits=String(n).length;
+  const base = digits<=1?52 : digits===2?46 : digits===3?36 : 28;
+  return Math.round(base * spec.fsf * (state.dot ? 0.86 : 1));
+}
+
+/* ---------- sticker SVG ---------- */
+function stickerSVG(n, themeColor, ring, guides){
+  const s=SHAPES[state.shape];
+  const fs = fontSize(n,s);
+  const F = FONTS[state.font];
+  const fill   = state.outline ? '#FFFFFF' : themeColor;
+  const stroke = state.outline ? themeColor : ring;
+  const ink    = state.outline ? '#232738' : inkFor(themeColor);
+  const guide = guides
+    ? `<g transform="translate(${s.cx} ${s.cy}) scale(1.13) translate(-${s.cx} -${s.cy})">
+         <path d="${s.d}" fill="none" stroke="#BCC3D2" stroke-width="1.4" stroke-dasharray="5 5"/></g>` : '';
+  return `<svg viewBox="${s.vb}" aria-hidden="true">
+    ${guide}
+    <path d="${s.d}" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/>
+    <text x="${s.cx}" y="${s.cy+1}" text-anchor="middle" dominant-baseline="central"
+      font-family="'${F.family}',sans-serif" font-weight="${F.weight}" font-size="${fs}" fill="${ink}">${labelFor(n)}</text>
+  </svg>`;
+}
+
+/* ---------- build sheets ---------- */
+function render(){
+  readRange();
+  const size=state.size;
+  const {cellW,cellH}=cellDims();
+  const gap = Math.min(8, Math.max(2, Math.round(size*0.1*10)/10));
+  const cols = Math.max(1, Math.floor((PAGE_W-2*MARGIN+gap)/(cellW+gap)));
+  const rows = Math.max(1, Math.floor((PAGE_H-2*MARGIN+gap)/(cellH+gap)));
+  const perSheet = cols*rows;
+
+  const numbers=[]; for(let n=state.from;n<=state.to;n++) numbers.push(n);
+  const sheetCount = Math.max(1, Math.ceil(numbers.length/perSheet));
+  const theme = THEMES[state.theme];
+  const ring = theme.ring || '#FFFFFF';
+
+  const root=$('#printRoot'); root.innerHTML='';
+  const frag=document.createDocumentFragment();
+  let gi=0;
+  for(let s=0;s<sheetCount;s++){
+    const sheet=document.createElement('div');
+    sheet.className='sheet';
+    sheet.style.cssText+=`grid-template-columns:repeat(${cols},${cellW}mm);grid-auto-rows:${cellH}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
+    const tag=document.createElement('div');
+    tag.className='sheetTag'; tag.textContent=`Sheet ${s+1} / ${sheetCount}`;
+    sheet.appendChild(tag);
+    const chunk=numbers.slice(s*perSheet,(s+1)*perSheet);
+    chunk.forEach((n,i)=>{
+      const color = state.alt ? theme.colors[gi % theme.colors.length] : theme.colors[0];
+      gi++;
+      const cell=document.createElement('div');
+      cell.className='stk pop';
+      cell.style.animationDelay = Math.min(i*12,420)+'ms';
+      cell.innerHTML = stickerSVG(n,color,ring,state.guides);
+      sheet.appendChild(cell);
+    });
+    frag.appendChild(sheet);
+  }
+  root.appendChild(frag);
+
+  build={numbers,cols,rows,perSheet,gap,sheetCount,size,cellW,cellH};
+
+  $('#sizeVal').textContent=size+' mm';
+  const dim = state.shape==='rect' ? ` &nbsp;·&nbsp; label ≈ <b>${cellW} × ${cellH} mm</b>` : '';
+  $('#capText').innerHTML=`<b>${cols} × ${rows}</b> per sheet &nbsp;·&nbsp; <b>${perSheet}</b> fit on one A4${dim}`;
+  $('#stats').textContent=`${numbers.length} sticker${numbers.length!==1?'s':''} · ${perSheet}/sheet · ${sheetCount} A4 sheet${sheetCount!==1?'s':''}`;
+  $('#chip').textContent=`${numbers.length} stickers · ${sheetCount} sheet${sheetCount!==1?'s':''}`;
+  $('#pillShape').textContent=SHAPES[state.shape].label + (state.outline?' · outline':'') + (state.dot?' · 1. 2. 3.':'');
+  $('#pillSize').textContent=size+' mm';
+  layout();
+}
+
+function layout(){
+  if(!build) return;
+  const scroller=$('#scroll');
+  const avail=scroller.clientWidth-40;
+  const sheetW=PAGE_W*PXMM, sheetH=PAGE_H*PXMM;
+  const s=Math.max(.22, Math.min(1, avail/sheetW));
+  const root=$('#printRoot');
+  root.style.transform=`scale(${s})`;
+  $('#fitBox').style.width=(sheetW*s)+'px';
+  $('#fitBox').style.height=(build.sheetCount*sheetH*s+(build.sheetCount-1)*28*s)+'px';
+}
+new ResizeObserver(layout).observe($('#scroll'));
+window.addEventListener('resize',layout);
+
+/* ---------- 1 mm stepper (hold-to-repeat) ---------- */
+function setSize(v){
+  v=Math.max(SIZE_MIN,Math.min(SIZE_MAX,v));
+  if(v===state.size) return;
+  state.size=v; $('#size').value=v; render();
+}
+function holdStep(btn, dir){
+  btn.addEventListener('click',()=>setSize(state.size+dir));
+  let t1,t2;
+  const stop=()=>{clearTimeout(t1); clearInterval(t2); t1=t2=null;};
+  btn.addEventListener('pointerdown',()=>{
+    t1=setTimeout(()=>{ t2=setInterval(()=>setSize(state.size+dir),110); },380);
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,stop));
+}
+holdStep($('#minus'),-1);
+holdStep($('#plus'),1);
+
+/* ---------- control builders ---------- */
+function buildShapeTiles(){
+  const box=$('#shapes'); box.innerHTML='';
+  SHAPE_ORDER.forEach(sh=>{
+    const s=SHAPES[sh];
+    const b=document.createElement('button');
+    b.className='tile'+(sh===state.shape?' sel':'');
+    b.innerHTML=`<svg viewBox="${sh==='rect'?'-5 -5 170 110':'-8 -8 116 116'}"><path d="${s.d}" fill="#232738"/></svg><span>${s.label}</span>`;
+    b.onclick=()=>{state.shape=sh; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
+    box.appendChild(b);
+  });
+}
+function buildSwatches(){
+  const box=$('#themes'); box.innerHTML='';
+  Object.entries(THEMES).forEach(([key,t])=>{
+    const b=document.createElement('button');
+    b.className='sw'+(key===state.theme?' sel':''); b.title=t.name;
+    b.style.background = key==='rainbow'
+      ? 'conic-gradient(#FF6B4A 0 60deg,#FFC531 0 120deg,#57CC99 0 180deg,#4CC9F0 0 240deg,#9B5DE5 0 300deg,#FF70A6 0)'
+      : t.colors[0];
+    b.onclick=()=>{state.theme=key; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
+    box.appendChild(b);
+  });
+}
+function buildFonts(){
+  const box=$('#fonts'); box.innerHTML='';
+  Object.entries(FONTS).forEach(([key,f])=>{
+    const b=document.createElement('button');
+    b.className='fontbtn'+(key===state.font?' sel':'');
+    b.innerHTML=`<b style="font-family:'${f.family}';font-weight:${f.weight}">123</b><span>${key}</span>`;
+    b.onclick=()=>{state.font=key; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
+    box.appendChild(b);
+  });
+}
+
+/* ---------- PNG export (150 dpi A4 = 1240×1754) ---------- */
+async function downloadPNGs(){
+  if(!build) return;
+  toast('Rendering PNG sheets…');
+  await document.fonts.ready;
+  const W=1240,H=1754, k=W/PAGE_W;
+  const theme=THEMES[state.theme], ring=theme.ring||'#FFFFFF', F=FONTS[state.font];
+  const s=SHAPES[state.shape];
+  const {cols,rows,gap,perSheet,cellW,cellH}=build;
+  const totalW=cols*cellW+(cols-1)*gap, totalH=rows*cellH+(rows-1)*gap;
+  const ox=(PAGE_W-totalW)/2, oy=(PAGE_H-totalH)/2;
+
+  for(let sh=0;sh<build.sheetCount;sh++){
+    const c=document.createElement('canvas'); c.width=W; c.height=H;
+    const ctx=c.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+    const chunk=build.numbers.slice(sh*perSheet,(sh+1)*perSheet);
+    chunk.forEach((n,i)=>{
+      const col=i%cols, row=Math.floor(i/cols);
+      const x=ox+col*(cellW+gap), y=oy+row*(cellH+gap);
+      const color = state.alt ? theme.colors[(sh*perSheet+i)%theme.colors.length] : theme.colors[0];
+      ctx.save();
+      ctx.translate(x*k,y*k);
+      const sc=cellH*k/s.h; ctx.scale(sc,sc);
+      if(state.guides){
+        ctx.save(); ctx.translate(s.cx,s.cy); ctx.scale(1.13,1.13); ctx.translate(-s.cx,-s.cy);
+        ctx.setLineDash([5,5]); ctx.strokeStyle='#BCC3D2'; ctx.lineWidth=1.4;
+        ctx.stroke(new Path2D(s.d)); ctx.restore();
+      }
+      const p=new Path2D(s.d);
+      ctx.fillStyle = state.outline ? '#FFFFFF' : color;
+      ctx.fill(p);
+      ctx.lineJoin='round';
+      ctx.strokeStyle = state.outline ? color : ring;
+      ctx.lineWidth=6; ctx.stroke(p);
+      ctx.fillStyle = state.outline ? '#232738' : inkFor(color);
+      ctx.font=`${F.weight} ${fontSize(n,s)}px '${F.family}'`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(labelFor(n),s.cx,s.cy+2);
+      ctx.restore();
+    });
+    await new Promise(res=>c.toBlob(b=>{
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(b);
+      a.download=`stickers-sheet-${sh+1}-of-${build.sheetCount}.png`;
+      a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); res();
+    },'image/png'));
+    await new Promise(r=>setTimeout(r,350));
+  }
+  toast('Done! Check your downloads 📥');
+}
+
+/* ---------- events ---------- */
+let debounce;
+const schedule=()=>{clearTimeout(debounce); debounce=setTimeout(render,90);};
+
+$('#from').addEventListener('input',schedule);
+$('#to').addEventListener('input',schedule);
+$('#size').addEventListener('input',e=>{state.size=+e.target.value; schedule();});
+$('#alt').addEventListener('change',e=>{state.alt=e.target.checked; render();});
+$('#guides').addEventListener('change',e=>{state.guides=e.target.checked; render();});
+$('#outline').addEventListener('change',e=>{state.outline=e.target.checked; render();});
+$('#dot').addEventListener('change',e=>{state.dot=e.target.checked; render();});
+['from','to'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')render();}));
+
+$('#ampoulePreset').onclick=()=>{
+  Object.assign(state,{shape:'rect', size:30, outline:true, guides:true, alt:true, theme:'rainbow', font:'Fredoka', dot:true});
+  $('#size').value=30; $('#outline').checked=true; $('#guides').checked=true;
+  $('#alt').checked=true; $('#dot').checked=true;
+  buildShapeTiles(); buildSwatches(); buildFonts(); render();
+  toast('Ampoule preset applied 🧪 30 × 18.75 mm · 1. 2. 3.');
+};
+
+$('#printBtn').onclick=()=>{toast('Opening print dialog — pick “Save as PDF” 🖨'); setTimeout(()=>window.print(),350);};
+$('#pngBtn').onclick=downloadPNGs;
+$('#resetBtn').onclick=()=>{
+  Object.assign(state,{from:1,to:30,size:42,shape:'circle',theme:'rainbow',font:'Fredoka',alt:true,guides:true,outline:false,dot:false});
+  $('#from').value=1; $('#to').value=30; $('#size').value=42;
+  $('#alt').checked=true; $('#guides').checked=true; $('#outline').checked=false; $('#dot').checked=false;
+  buildShapeTiles(); buildSwatches(); buildFonts(); render(); toast('Back to defaults ✨');
+};
+
+document.getElementById('starDeco').setAttribute('d',starD());
+document.getElementById('starDeco').setAttribute('fill','#FFC531');
+document.getElementById('starDeco').setAttribute('stroke','#fff');
+document.getElementById('starDeco').setAttribute('stroke-width','6');
+document.getElementById('starDeco').setAttribute('stroke-linejoin','round');
+document.getElementById('logoStar').setAttribute('d',starD(50,31));
+
+buildShapeTiles(); buildSwatches(); buildFonts(); render();
+</script>
+</body>
+</html>
