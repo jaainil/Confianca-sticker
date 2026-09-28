@@ -19,8 +19,10 @@
   body{
     font-family:'Nunito',sans-serif; color:var(--ink); background:var(--bg);
     background-image:radial-gradient(#CBD5E6 1.3px, transparent 1.3px);
-    background-size:22px 22px;
+    background-size:22px 22px; -webkit-tap-highlight-color:transparent;
   }
+  button, .switch, input[type=range], input[type=color]{touch-action:manipulation}
+
   .float{position:fixed; z-index:0; opacity:.55; pointer-events:none; animation:bob 6s ease-in-out infinite alternate}
   .float svg{display:block; filter:drop-shadow(3px 4px 0 rgba(35,39,56,.18))}
   .f1{top:9%; left:2%; transform:rotate(-12deg)}
@@ -32,18 +34,18 @@
 
   .wrap{max-width:1220px; margin:0 auto; padding:22px; position:relative; z-index:1}
 
-  header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:20px}
-  .brand{display:flex; align-items:center; gap:14px}
-  .logo{width:58px; height:58px; transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+  header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .logo{width:54px; height:54px; transition:transform .3s cubic-bezier(.3,1.6,.5,1); flex:none}
   .logo:hover{transform:rotate(-14deg) scale(1.1)}
-  h1{font-family:'Bungee'; font-size:clamp(26px,4.5vw,42px); letter-spacing:1px; line-height:1}
+  h1{font-family:'Bungee'; font-size:clamp(22px,4.5vw,42px); letter-spacing:1px; line-height:1}
   h1 em{font-style:normal; color:var(--pink); text-shadow:2px 2px 0 rgba(35,39,56,.15)}
   .tagline{font-weight:800; font-size:13px; color:#5A6277; margin-top:4px}
   .chip{background:var(--yellow); border:2.5px solid var(--ink); border-radius:999px;
-    padding:7px 16px; font-weight:900; font-size:13px; box-shadow:3px 3px 0 var(--ink)}
+    padding:7px 14px; font-weight:900; font-size:12.5px; box-shadow:3px 3px 0 var(--ink)}
 
   main.layout{display:grid; grid-template-columns:360px 1fr; gap:22px; align-items:start}
-  @media(max-width:960px){main.layout{grid-template-columns:1fr}}
+  @media(max-width:960px){main.layout{grid-template-columns:1fr; gap:16px}}
   .panel{background:var(--paper); border:2.5px solid var(--ink); border-radius:20px; box-shadow:var(--shadow)}
 
   .controls{padding:20px}
@@ -57,8 +59,8 @@
   section:nth-of-type(4) .lbl::before{background:var(--green)}
   section:nth-of-type(5) .lbl::before{background:var(--purple)}
 
-  .presetRow{display:flex; align-items:center; gap:10px; padding-bottom:14px; border-bottom:2px dashed #DCE2EE}
-  .preset{background:var(--blue); border:2.5px solid var(--ink); border-radius:999px; padding:8px 16px;
+  .presetRow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-bottom:14px; border-bottom:2px dashed #DCE2EE}
+  .preset{background:var(--blue); border:2.5px solid var(--ink); border-radius:999px; padding:9px 16px;
     font:900 13px 'Nunito'; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
     transition:transform .14s, box-shadow .14s; color:#fff}
   .preset:hover{transform:translate(-1px,-2px) rotate(-2deg); box-shadow:5px 5px 0 var(--ink)}
@@ -73,20 +75,19 @@
   .arrow{font-size:24px; font-weight:900; text-align:center; padding-bottom:8px}
 
   .sliderrow{display:flex; align-items:center; gap:8px}
-  .stepBtn{width:34px; height:34px; flex:none; border:2.5px solid var(--ink); border-radius:10px;
+  .stepBtn{width:38px; height:38px; flex:none; border:2.5px solid var(--ink); border-radius:10px;
     background:var(--yellow); font:900 20px 'Nunito'; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
     display:grid; place-items:center; padding-bottom:3px; user-select:none;
     transition:transform .12s, box-shadow .12s, background .12s}
   .stepBtn:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink); background:#FFD25E}
   .stepBtn:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
-  input[type=range]{flex:1; -webkit-appearance:none; height:10px; border-radius:99px;
-    background:#E3E8F2; border:2px solid var(--ink); cursor:pointer}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%;
-    background:var(--yellow); border:2.5px solid var(--ink); box-shadow:2px 2px 0 var(--ink); transition:transform .15s}
-  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
-  input[type=range]::-moz-range-thumb{width:22px; height:22px; border-radius:50%;
+  input[type=range]{flex:1; -webkit-appearance:none; appearance:none; height:10px; border-radius:99px;
+    background:#E3E8F2; border:2px solid var(--ink); cursor:pointer; min-width:60px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+    background:var(--yellow); border:2.5px solid var(--ink); box-shadow:2px 2px 0 var(--ink)}
+  input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%;
     background:var(--yellow); border:2.5px solid var(--ink)}
-  .sizeval{font-weight:900; font-size:14px; background:#EAF7FF; border:2px solid var(--ink); border-radius:999px; padding:4px 11px; white-space:nowrap}
+  .sizeval{font-weight:900; font-size:13.5px; background:#EAF7FF; border:2px solid var(--ink); border-radius:999px; padding:4px 10px; white-space:nowrap}
   .cap{font-size:12px; font-weight:800; color:#6B7387; margin-top:9px}
   .cap b{color:var(--ink)}
 
@@ -99,10 +100,15 @@
   .tile.sel{background:var(--yellow); transform:rotate(-3deg); box-shadow:3px 3px 0 var(--ink)}
 
   .swrow{display:flex; gap:11px; flex-wrap:wrap}
-  .sw{width:36px; height:36px; border-radius:50%; border:2.5px solid var(--ink); cursor:pointer;
-      transition:transform .16s}
-  .sw:hover{transform:scale(1.18) rotate(8deg)}
-  .sw.sel{box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--ink); transform:scale(1.1)}
+  .sw{width:38px; height:38px; border-radius:50%; border:2.5px solid var(--ink); cursor:pointer;
+      transition:transform .16s; flex:none; padding:0}
+  .sw:hover{transform:scale(1.15) rotate(8deg)}
+  .sw.sel{box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--ink); transform:scale(1.08)}
+  .sw.custom{position:relative; overflow:hidden; display:grid; place-items:center; background:#fff}
+  .sw.custom::after{content:"＋"; color:#fff; font-weight:900; font-size:15px; pointer-events:none;
+    text-shadow:0 1px 3px rgba(0,0,0,.55)}
+  .sw.custom input{position:absolute; inset:-8px; width:calc(100% + 16px); height:calc(100% + 16px);
+    opacity:0; cursor:pointer; border:none; padding:0}
 
   .fontrow{display:flex; gap:8px}
   .fontbtn{flex:1; border:2.5px solid var(--ink); border-radius:12px; background:#fff; padding:8px 4px;
@@ -123,7 +129,7 @@
   .switch input:checked + .track .knob{left:22px}
 
   .actions{display:grid; gap:10px; padding-top:16px; border-top:2px dashed #DCE2EE}
-  .btn{font:900 15px 'Nunito'; border:2.5px solid var(--ink); border-radius:14px; padding:13px 16px;
+  .btn{font:900 15px 'Nunito'; border:2.5px solid var(--ink); border-radius:14px; padding:14px 16px;
     cursor:pointer; background:#fff; box-shadow:4px 4px 0 var(--ink); display:flex; align-items:center;
     justify-content:center; gap:9px; transition:transform .13s, box-shadow .13s}
   .btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink)}
@@ -131,16 +137,16 @@
   .btn.primary{background:var(--yellow)}
   .btn svg{width:18px; height:18px}
   .reset{background:none; border:none; font:800 12px 'Nunito'; color:#8A91A5; cursor:pointer;
-    text-decoration:underline dotted; justify-self:center}
+    text-decoration:underline dotted; justify-self:center; padding:4px}
   .reset:hover{color:var(--pink)}
 
   .preview{padding:16px; display:flex; flex-direction:column}
   .pbar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:13px}
-  .pstats{font-weight:900; font-size:14px}
+  .pstats{font-weight:900; font-size:13.5px}
   .pill{background:#FFF3CC; border:2px solid var(--ink); border-radius:999px; padding:3px 11px;
-    font-size:12px; font-weight:900; display:inline-block; margin-right:6px}
+    font-size:12px; font-weight:900; display:inline-block; margin:2px 6px 2px 0}
   .previewScroll{flex:1; overflow:auto; border:2px dashed #C4CFE3; border-radius:16px;
-    padding:20px; background:#F6F9FE; min-height:65vh}
+    padding:20px; background:#F6F9FE; min-height:65vh; -webkit-overflow-scrolling:touch}
   #fitBox{margin:0 auto}
   #printRoot{transform-origin:top left}
 
@@ -159,12 +165,29 @@
   .hint b{color:var(--ink)}
   footer{margin-top:26px; text-align:center; font-size:12px; font-weight:800; color:#9AA1B4}
 
-  #toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(90px);
-    background:var(--ink); color:#fff; font-weight:800; font-size:14px; padding:12px 22px;
+  #toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(90px);
+    background:var(--ink); color:#fff; font-weight:800; font-size:13.5px; padding:12px 20px;
     border-radius:999px; box-shadow:4px 4px 0 rgba(35,39,56,.25); opacity:0; z-index:99;
-    transition:transform .35s cubic-bezier(.3,1.4,.5,1), opacity .3s; pointer-events:none}
+    transition:transform .35s cubic-bezier(.3,1.4,.5,1), opacity .3s; pointer-events:none;
+    max-width:90vw; text-align:center}
   #toast.show{transform:translateX(-50%) translateY(0); opacity:1}
 
+  /* ---------- small screens ---------- */
+  @media(max-width:640px){
+    .wrap{padding:12px}
+    header{margin-bottom:14px}
+    .controls{padding:14px}
+    .preview{padding:12px}
+    .previewScroll{padding:10px; min-height:45vh}
+    .field input{font-size:19px; padding:8px 10px}
+    .tiles{gap:5px}
+    .tile svg{width:26px; height:19px}
+    .swrow{gap:9px}
+    .presetNote{display:none}
+    .hint{font-size:11.5px}
+  }
+
+  /* ---------- print ---------- */
   @page{size:A4; margin:0}
   @media print{
     body{background:#fff}
@@ -210,15 +233,15 @@
 
       <div class="presetRow">
         <button class="preset" id="ampoulePreset">🧪 Ampoule labels</button>
-        <span class="presetNote">quick setup:<br>rect · border only · dots · 30 mm</span>
+        <span class="presetNote">rect · black outline · dots · 30 mm</span>
       </div>
 
       <section>
         <div class="lbl">Numbers from → to</div>
         <div class="numrow">
-          <div class="field"><label for="from">FROM</label><input id="from" type="number" min="0" max="999" value="1"></div>
+          <div class="field"><label for="from">FROM</label><input id="from" type="number" inputmode="numeric" min="0" max="999" value="1"></div>
           <div class="arrow">→</div>
-          <div class="field"><label for="to">TO</label><input id="to" type="number" min="0" max="999" value="30"></div>
+          <div class="field"><label for="to">TO</label><input id="to" type="number" inputmode="numeric" min="0" max="999" value="30"></div>
         </div>
       </section>
 
@@ -239,7 +262,7 @@
       </section>
 
       <section>
-        <div class="lbl">Colors</div>
+        <div class="lbl">Colors · tap ＋ to pick your own</div>
         <div class="swrow" id="themes"></div>
       </section>
 
@@ -252,7 +275,7 @@
         <div class="lbl">Extras</div>
         <div class="toggles">
           <label class="switch"><input type="checkbox" id="dot"><span class="track"><span class="knob"></span></span> Dot after number (1. 2. 3.)</label>
-          <label class="switch"><input type="checkbox" id="outline"><span class="track"><span class="knob"></span></span> Border only (no fill)</label>
+          <label class="switch"><input type="checkbox" id="outline" checked><span class="track"><span class="knob"></span></span> Border only (no fill)</label>
           <label class="switch"><input type="checkbox" id="alt" checked><span class="track"><span class="knob"></span></span> Alternate colors</label>
           <label class="switch"><input type="checkbox" id="guides" checked><span class="track"><span class="knob"></span></span> Cut guides</label>
         </div>
@@ -296,6 +319,7 @@ const PAGE_W = 210, PAGE_H = 297, MARGIN = 10, MAX_STICKERS = 800;
 const SIZE_MIN = 10, SIZE_MAX = 90;
 
 const THEMES = {
+  black:    {name:'Black',    colors:['#232738']},
   rainbow:  {name:'Rainbow',  colors:['#FF6B4A','#FFC531','#57CC99','#4CC9F0','#9B5DE5','#FF70A6']},
   sunshine: {name:'Sunshine', colors:['#FFC531','#FF9E1B','#FFB800','#FFD97A']},
   bubblegum:{name:'Bubblegum',colors:['#FF70A6','#FF9EC6','#F65C93','#FFC2DA']},
@@ -303,6 +327,7 @@ const THEMES = {
   forest:   {name:'Forest',   colors:['#57CC99','#80ED99','#2FA071','#B8F0C9']},
   chalk:    {name:'Chalk',    colors:['#F4F1E8','#EDE9DC'], ring:'#DBD6C6'}
 };
+const THEME_ORDER = ['black','rainbow','sunshine','bubblegum','ocean','forest','chalk'];
 const FONTS = {
   Fredoka:{family:'Fredoka', weight:600},
   Bungee: {family:'Bungee',  weight:400},
@@ -327,9 +352,16 @@ const SHAPES = {
 };
 const SHAPE_ORDER = ['rect','circle','square','hex','star'];
 
-const state = {from:1, to:30, size:42, shape:'rect', theme:'rainbow', font:'Fredoka',
-               alt:true, guides:true, outline:false, dot:false};
+/* DEFAULTS: border-only + black, ampoule-friendly */
+const DEFAULTS = {from:1, to:30, size:42, shape:'rect', theme:'black', font:'Fredoka',
+                  alt:true, guides:true, outline:true, dot:false};
+const state = Object.assign({}, DEFAULTS, {customColor:'#1D6FE0'});
 let build = null;
+
+function currentTheme(){
+  if(state.theme==='custom') return {name:'Custom', colors:[state.customColor]};
+  return THEMES[state.theme];
+}
 
 /* ---------- helpers ---------- */
 function inkFor(hex){
@@ -353,9 +385,7 @@ function cellDims(){
   const s=SHAPES[state.shape];
   return {cellW:state.size, cellH:+(state.size*s.ratio).toFixed(2)};
 }
-/* number label, with optional dot: "1." */
 function labelFor(n){ return state.dot ? n + '.' : String(n); }
-/* font size for a sticker; slightly smaller when the dot is on so it fits */
 function fontSize(n, spec){
   const digits=String(n).length;
   const base = digits<=1?52 : digits===2?46 : digits===3?36 : 28;
@@ -393,7 +423,7 @@ function render(){
 
   const numbers=[]; for(let n=state.from;n<=state.to;n++) numbers.push(n);
   const sheetCount = Math.max(1, Math.ceil(numbers.length/perSheet));
-  const theme = THEMES[state.theme];
+  const theme = currentTheme();
   const ring = theme.ring || '#FFFFFF';
 
   const root=$('#printRoot'); root.innerHTML='';
@@ -435,9 +465,9 @@ function render(){
 function layout(){
   if(!build) return;
   const scroller=$('#scroll');
-  const avail=scroller.clientWidth-40;
+  const avail=scroller.clientWidth-(window.innerWidth<640?20:40);
   const sheetW=PAGE_W*PXMM, sheetH=PAGE_H*PXMM;
-  const s=Math.max(.22, Math.min(1, avail/sheetW));
+  const s=Math.max(.2, Math.min(1, avail/sheetW));
   const root=$('#printRoot');
   root.style.transform=`scale(${s})`;
   $('#fitBox').style.width=(sheetW*s)+'px';
@@ -445,6 +475,7 @@ function layout(){
 }
 new ResizeObserver(layout).observe($('#scroll'));
 window.addEventListener('resize',layout);
+window.addEventListener('orientationchange',()=>setTimeout(layout,200));
 
 /* ---------- 1 mm stepper (hold-to-repeat) ---------- */
 function setSize(v){
@@ -454,6 +485,7 @@ function setSize(v){
 }
 function holdStep(btn, dir){
   btn.addEventListener('click',()=>setSize(state.size+dir));
+  btn.addEventListener('contextmenu',e=>e.preventDefault());
   let t1,t2;
   const stop=()=>{clearTimeout(t1); clearInterval(t2); t1=t2=null;};
   btn.addEventListener('pointerdown',()=>{
@@ -478,7 +510,8 @@ function buildShapeTiles(){
 }
 function buildSwatches(){
   const box=$('#themes'); box.innerHTML='';
-  Object.entries(THEMES).forEach(([key,t])=>{
+  THEME_ORDER.forEach(key=>{
+    const t=THEMES[key];
     const b=document.createElement('button');
     b.className='sw'+(key===state.theme?' sel':''); b.title=t.name;
     b.style.background = key==='rainbow'
@@ -487,6 +520,23 @@ function buildSwatches(){
     b.onclick=()=>{state.theme=key; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
     box.appendChild(b);
   });
+  /* custom color picker swatch */
+  const cp=document.createElement('span');
+  cp.className='sw custom'+(state.theme==='custom'?' sel':'');
+  cp.title='Pick a custom color';
+  cp.style.background=state.customColor;
+  const ci=document.createElement('input');
+  ci.type='color'; ci.value=state.customColor;
+  ci.addEventListener('input',e=>{
+    state.customColor=e.target.value;
+    state.theme='custom';
+    cp.style.background=state.customColor;
+    [...box.children].forEach(c=>c.classList.remove('sel'));
+    cp.classList.add('sel');
+    render();
+  });
+  cp.appendChild(ci);
+  box.appendChild(cp);
 }
 function buildFonts(){
   const box=$('#fonts'); box.innerHTML='';
@@ -498,6 +548,10 @@ function buildFonts(){
     box.appendChild(b);
   });
 }
+function syncToggles(){
+  $('#alt').checked=state.alt; $('#guides').checked=state.guides;
+  $('#outline').checked=state.outline; $('#dot').checked=state.dot;
+}
 
 /* ---------- PNG export (150 dpi A4 = 1240×1754) ---------- */
 async function downloadPNGs(){
@@ -505,7 +559,7 @@ async function downloadPNGs(){
   toast('Rendering PNG sheets…');
   await document.fonts.ready;
   const W=1240,H=1754, k=W/PAGE_W;
-  const theme=THEMES[state.theme], ring=theme.ring||'#FFFFFF', F=FONTS[state.font];
+  const theme=currentTheme(), ring=theme.ring||'#FFFFFF', F=FONTS[state.font];
   const s=SHAPES[state.shape];
   const {cols,rows,gap,perSheet,cellW,cellH}=build;
   const totalW=cols*cellW+(cols-1)*gap, totalH=rows*cellH+(rows-1)*gap;
@@ -565,9 +619,8 @@ $('#dot').addEventListener('change',e=>{state.dot=e.target.checked; render();});
 ['from','to'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')render();}));
 
 $('#ampoulePreset').onclick=()=>{
-  Object.assign(state,{shape:'rect', size:30, outline:true, guides:true, alt:true, theme:'rainbow', font:'Fredoka', dot:true});
-  $('#size').value=30; $('#outline').checked=true; $('#guides').checked=true;
-  $('#alt').checked=true; $('#dot').checked=true;
+  Object.assign(state,{shape:'rect', size:30, outline:true, guides:true, alt:true, theme:'black', font:'Fredoka', dot:true});
+  $('#size').value=30; syncToggles();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
   toast('Ampoule preset applied 🧪 30 × 18.75 mm · 1. 2. 3.');
 };
@@ -575,10 +628,11 @@ $('#ampoulePreset').onclick=()=>{
 $('#printBtn').onclick=()=>{toast('Opening print dialog — pick “Save as PDF” 🖨'); setTimeout(()=>window.print(),350);};
 $('#pngBtn').onclick=downloadPNGs;
 $('#resetBtn').onclick=()=>{
-  Object.assign(state,{from:1,to:30,size:42,shape:'circle',theme:'rainbow',font:'Fredoka',alt:true,guides:true,outline:false,dot:false});
-  $('#from').value=1; $('#to').value=30; $('#size').value=42;
-  $('#alt').checked=true; $('#guides').checked=true; $('#outline').checked=false; $('#dot').checked=false;
-  buildShapeTiles(); buildSwatches(); buildFonts(); render(); toast('Back to defaults ✨');
+  Object.assign(state, DEFAULTS);
+  $('#from').value=DEFAULTS.from; $('#to').value=DEFAULTS.to; $('#size').value=DEFAULTS.size;
+  syncToggles();
+  buildShapeTiles(); buildSwatches(); buildFonts(); render();
+  toast('Back to defaults ✨ border-only black labels');
 };
 
 document.getElementById('starDeco').setAttribute('d',starD());
@@ -588,7 +642,7 @@ document.getElementById('starDeco').setAttribute('stroke-width','6');
 document.getElementById('starDeco').setAttribute('stroke-linejoin','round');
 document.getElementById('logoStar').setAttribute('d',starD(50,31));
 
-buildShapeTiles(); buildSwatches(); buildFonts(); render();
+buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); render();
 </script>
 </body>
 </html>
