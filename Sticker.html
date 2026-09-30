@@ -207,7 +207,7 @@
 
   .sheet{width:210mm; height:297mm; background:#fff; border:1px solid #E2E7F1; position:relative;
     box-shadow:0 12px 26px rgba(35,39,56,.14); display:grid; margin-bottom:28px;
-    justify-content:center; align-content:center}
+    box-sizing:border-box; justify-content:start; align-content:start}
   .sheetTag{position:absolute; top:-13px; left:14px; background:var(--pink); color:#fff;
     border:2.5px solid var(--ink); border-radius:999px; padding:2px 12px; font-size:11px;
     font-weight:900; transform:rotate(-3deg); box-shadow:2px 2px 0 var(--ink)}
@@ -360,7 +360,7 @@
 
       <div class="presetRow">
         <button class="preset" id="ampoulePreset">🧪 Ampoule labels</button>
-        <span class="presetNote">rect · black outline · dots · 30 mm</span>
+        <span class="presetNote">rect · 14 mm · 0 mm gap · down cols</span>
       </div>
 
       <section>
@@ -378,6 +378,20 @@
           <button type="button" class="range-chip" data-from="101" data-to="200">101–200</button>
         </div>
         <div class="range-hint" id="rangeHint"></div>
+
+        <div class="sublbl">Multiply columns (Copies per number)</div>
+        <div class="sliderrow">
+          <button type="button" class="stepBtn" id="multMinus" title="-1 copy">−</button>
+          <input type="range" id="multInput" min="1" max="10" step="1" value="1">
+          <button type="button" class="stepBtn" id="multPlus" title="+1 copy">+</button>
+          <div class="sizeval" id="multVal">1× (Single)</div>
+        </div>
+        <div class="range-presets" id="multPresets">
+          <button type="button" class="range-chip sel" data-mult="1">1×</button>
+          <button type="button" class="range-chip" data-mult="2">2× (Duplicate col)</button>
+          <button type="button" class="range-chip" data-mult="3">3× (Triplicate)</button>
+          <button type="button" class="range-chip" data-mult="4">4× (Quad)</button>
+        </div>
       </section>
 
       <section>
@@ -385,22 +399,22 @@
         <div class="sublbl" style="margin-top:0">Sticker size (1 mm steps)</div>
         <div class="sliderrow">
           <button type="button" class="stepBtn" id="minus" title="-1 mm">−</button>
-          <input type="range" id="size" min="10" max="90" step="1" value="42">
+          <input type="range" id="size" min="10" max="90" step="1" value="14">
           <button type="button" class="stepBtn" id="plus" title="+1 mm">+</button>
-          <div class="sizeval" id="sizeVal">42 mm</div>
+          <div class="sizeval" id="sizeVal">14 mm</div>
         </div>
 
         <div class="sublbl">Space between stickers (Gap)</div>
         <div class="sliderrow">
           <button type="button" class="stepBtn" id="gapMinus" title="-0.5 mm">−</button>
-          <input type="range" id="gapInput" min="0" max="16" step="0.5" value="4">
+          <input type="range" id="gapInput" min="0" max="16" step="0.5" value="0">
           <button type="button" class="stepBtn" id="gapPlus" title="+0.5 mm">+</button>
-          <div class="sizeval" id="gapVal">4 mm</div>
+          <div class="sizeval" id="gapVal">0 mm</div>
         </div>
         <div class="range-presets" id="gapPresets">
-          <button type="button" class="range-chip" data-gap="0">0 mm (Flush)</button>
+          <button type="button" class="range-chip sel" data-gap="0">0 mm (Flush)</button>
           <button type="button" class="range-chip" data-gap="2">2 mm (Tight)</button>
-          <button type="button" class="range-chip sel" data-gap="4">4 mm (Normal)</button>
+          <button type="button" class="range-chip" data-gap="4">4 mm (Normal)</button>
           <button type="button" class="range-chip" data-gap="8">8 mm (Wide)</button>
         </div>
 
@@ -428,13 +442,25 @@
 
         <div class="sublbl">Numbering sequence flow</div>
         <div class="dir-row" id="flowGroup">
-          <button type="button" class="dir-btn sel" data-flow="row" title="Fill left to right across rows">
+          <button type="button" class="dir-btn" data-flow="row" title="Fill left to right across rows">
             <span class="dir-icon">➡️</span>
             <span class="dir-label">Across (Rows)</span>
           </button>
-          <button type="button" class="dir-btn" data-flow="column" title="Fill top to bottom down columns">
+          <button type="button" class="dir-btn sel" data-flow="column" title="Fill top to bottom down columns">
             <span class="dir-icon">⬇️</span>
             <span class="dir-label">Down (Columns)</span>
+          </button>
+        </div>
+
+        <div class="sublbl">Sheet alignment (Start position)</div>
+        <div class="dir-row" id="alignGroup">
+          <button type="button" class="dir-btn sel" data-align="left" title="Start stickers from top-left margin">
+            <span class="dir-icon">⇤</span>
+            <span class="dir-label">Left (Start)</span>
+          </button>
+          <button type="button" class="dir-btn" data-align="center" title="Center stickers on sheet">
+            <span class="dir-icon">⇥⇤</span>
+            <span class="dir-label">Center</span>
           </button>
         </div>
       </section>
@@ -530,6 +556,8 @@
           <span class="pill" id="pillShape"></span>
           <span class="pill" id="pillSize"></span>
           <span class="pill" id="pillGap"></span>
+          <span class="pill" id="pillAlign"></span>
+          <span class="pill" id="pillMult"></span>
           <span class="pill" id="pillFont"></span>
         </div>
       </div>
@@ -597,7 +625,8 @@ function getShapeSpec(){
 }
 
 /* DEFAULTS: border-only + black, ampoule-friendly */
-const DEFAULTS = {from:1, to:30, size:42, gap:4, orientation:'horizontal', flow:'row',
+const DEFAULTS = {from:1, to:30, size:14, gap:0, orientation:'horizontal', flow:'column',
+                  align:'left', multiply:1,
                   shape:'rect', theme:'black', font:'Fredoka',
                   fontScale:100, fontVariation:'uniform', zoom:'fit', mobileView:'controls',
                   alt:true, guides:true, outline:true, dot:false};
@@ -709,16 +738,23 @@ function cellDims(){
 }
 function labelFor(n){ return state.dot ? n + '.' : String(n); }
 function fontSize(n, spec, index=0){
-  const digits=String(n).length;
-  const base = digits<=1?52 : digits===2?46 : digits===3?36 : 28;
-  let vMult = 1.0;
-  if(state.fontVariation==='mixed'){
-    vMult = MIXED_JITTER[index % MIXED_JITTER.length];
-  } else if(state.fontVariation==='alt'){
-    vMult = (index % 2 === 0) ? 0.88 : 1.15;
-  } else if(state.fontVariation==='autofit'){
-    vMult = digits<=1 ? 1.18 : digits===2 ? 1.0 : digits===3 ? 0.92 : 0.82;
+  const maxDigits = Math.max(String(state.from || 1).length, String(state.to || 30).length);
+  let base;
+  if(state.fontVariation === 'autofit'){
+    const digits = String(n).length;
+    base = digits <= 1 ? 50 : digits === 2 ? 44 : digits === 3 ? 36 : 28;
+  } else {
+    // Uniform mode: all numbers share the exact same font size based on the range max digits
+    base = maxDigits <= 2 ? 44 : maxDigits === 3 ? 36 : 28;
   }
+
+  let vMult = 1.0;
+  if(state.fontVariation === 'mixed'){
+    vMult = MIXED_JITTER[index % MIXED_JITTER.length];
+  } else if(state.fontVariation === 'alt'){
+    vMult = (index % 2 === 0) ? 0.88 : 1.15;
+  }
+
   const scale = (state.fontScale || 100) / 100;
   return Math.max(8, Math.round(base * spec.fsf * (state.dot ? 0.86 : 1) * scale * vMult));
 }
@@ -753,63 +789,145 @@ function render(keepInputs = false){
   const size = state.size;
   const {cellW, cellH} = cellDims();
   const gap = Math.max(0, Math.min(16, typeof state.gap === 'number' ? state.gap : 4));
-  const cols = Math.max(1, Math.floor((PAGE_W - 2 * MARGIN + gap) / (cellW + gap)));
-  const rows = Math.max(1, Math.floor((PAGE_H - 2 * MARGIN + gap) / (cellH + gap)));
-  const perSheet = cols * rows;
+  const multiply = Math.max(1, Math.min(20, parseInt(state.multiply, 10) || 1));
+  const align = state.align || 'left';
+  const flow = state.flow || 'row';
 
-  const numbers = []; for(let n = state.from; n <= state.to; n++) numbers.push(n);
-  const sheetCount = Math.max(1, Math.ceil(numbers.length / perSheet));
+  const maxCols = Math.max(1, Math.floor((PAGE_W - 2 * MARGIN + gap) / (cellW + gap)));
+  const maxRows = Math.max(1, Math.floor((PAGE_H - 2 * MARGIN + gap) / (cellH + gap)));
+
+  const baseNumbers = [];
+  for(let n = state.from; n <= state.to; n++) baseNumbers.push(n);
+
+  const sheetsData = [];
+
+  if(flow === 'column'){
+    // Slices of base numbers that fit in column height (at most maxRows)
+    const slices = [];
+    for(let i = 0; i < baseNumbers.length; i += maxRows){
+      slices.push(baseNumbers.slice(i, i + maxRows));
+    }
+
+    let currentSheet = { cols: 0, rows: 0, cells: [] };
+    let globalIdx = 0;
+
+    for(const sl of slices){
+      for(let m = 0; m < multiply; m++){
+        if(currentSheet.cols >= maxCols){
+          sheetsData.push(currentSheet);
+          currentSheet = { cols: 0, rows: 0, cells: [] };
+        }
+        const colIdx = currentSheet.cols;
+        currentSheet.cols++;
+        currentSheet.rows = Math.max(currentSheet.rows, sl.length);
+        sl.forEach((num, rowIdx) => {
+          currentSheet.cells.push({ n: num, col: colIdx, row: rowIdx, globalIdx: globalIdx++ });
+        });
+      }
+    }
+    if(currentSheet.cells.length > 0) sheetsData.push(currentSheet);
+  } else {
+    // Row flow: duplicate numbers consecutively
+    const multiplied = [];
+    baseNumbers.forEach(num => {
+      for(let m = 0; m < multiply; m++) multiplied.push(num);
+    });
+
+    const perSheet = maxCols * maxRows;
+    const sheetCount = Math.max(1, Math.ceil(multiplied.length / perSheet));
+    let globalIdx = 0;
+
+    for(let s = 0; s < sheetCount; s++){
+      const chunk = multiplied.slice(s * perSheet, (s + 1) * perSheet);
+      const cols = Math.min(maxCols, chunk.length);
+      const rows = Math.ceil(chunk.length / maxCols);
+      const cells = [];
+      chunk.forEach((num, i) => {
+        const col = i % maxCols;
+        const row = Math.floor(i / maxCols);
+        cells.push({ n: num, col, row, globalIdx: globalIdx++ });
+      });
+      sheetsData.push({ cols, rows, cells });
+    }
+  }
+
+  const sheetCount = sheetsData.length;
+  const totalStickersCount = baseNumbers.length * multiply;
   const theme = currentTheme();
   const ring = theme.ring || '#FFFFFF';
 
+  const alignJustify = align === 'center' ? 'center' : 'start';
+  const alignContent = align === 'center' ? 'center' : 'start';
+
   const root = $('#printRoot'); root.innerHTML = '';
   const frag = document.createDocumentFragment();
-  let gi = 0;
-  for(let s = 0; s < sheetCount; s++){
+
+  sheetsData.forEach((sh, s) => {
     const sheet = document.createElement('div');
     sheet.className = 'sheet';
-    if(state.flow === 'column'){
-      sheet.style.cssText += `grid-auto-flow:column;grid-template-rows:repeat(${rows},${cellH}mm);grid-auto-columns:${cellW}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
-    } else {
-      sheet.style.cssText += `grid-auto-flow:row;grid-template-columns:repeat(${cols},${cellW}mm);grid-auto-rows:${cellH}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
-    }
+    sheet.style.cssText += `grid-template-columns:repeat(${sh.cols},${cellW}mm);grid-template-rows:repeat(${sh.rows},${cellH}mm);gap:${gap}mm;padding:${MARGIN}mm;justify-content:${alignJustify};align-content:${alignContent};`;
+
     const tag = document.createElement('div');
     tag.className = 'sheetTag'; tag.textContent = `Sheet ${s+1} / ${sheetCount}`;
     sheet.appendChild(tag);
-    const chunk = numbers.slice(s * perSheet, (s + 1) * perSheet);
-    chunk.forEach((n, i) => {
-      const color = state.alt ? theme.colors[gi % theme.colors.length] : theme.colors[0];
+
+
+    sh.cells.forEach(cellData => {
+      const color = state.alt ? theme.colors[cellData.globalIdx % theme.colors.length] : theme.colors[0];
       const cell = document.createElement('div');
       cell.className = 'stk pop';
-      cell.style.animationDelay = Math.min(i * 12, 420) + 'ms';
-      cell.innerHTML = stickerSVG(n, color, ring, state.guides, gi);
+      cell.style.gridColumn = cellData.col + 1;
+      cell.style.gridRow = cellData.row + 1;
+      cell.style.animationDelay = Math.min(cellData.globalIdx * 10, 420) + 'ms';
+      cell.innerHTML = stickerSVG(cellData.n, color, ring, state.guides, cellData.globalIdx);
       sheet.appendChild(cell);
-      gi++;
     });
+
     frag.appendChild(sheet);
-  }
+  });
   root.appendChild(frag);
 
-  build = {numbers, cols, rows, perSheet, gap, sheetCount, size, cellW, cellH};
+  build = {
+    baseNumbers,
+    sheets: sheetsData,
+    sheetCount,
+    totalStickersCount,
+    maxCols,
+    maxRows,
+    gap,
+    multiply,
+    size,
+    cellW,
+    cellH,
+    align,
+    flow
+  };
 
   $('#sizeVal').textContent = size + ' mm';
   if($('#gapVal')) $('#gapVal').textContent = gap + ' mm';
   if($('#gapInput') && document.activeElement !== $('#gapInput')) $('#gapInput').value = gap;
   if(typeof updateGapPresets === 'function') updateGapPresets();
 
+  if($('#multVal')) $('#multVal').textContent = `${multiply}× (${multiply === 1 ? 'Single' : multiply + ' columns'})`;
+  if($('#multInput') && document.activeElement !== $('#multInput')) $('#multInput').value = multiply;
+  if(typeof updateMultPresets === 'function') updateMultPresets();
+
   $('#fontScaleVal').textContent = state.fontScale + '%';
   const dim = state.shape === 'rect'
     ? ` &nbsp;·&nbsp; label ≈ <b>${cellW} × ${cellH} mm</b> (${state.orientation === 'vertical' ? 'vert' : 'horiz'})`
     : ` &nbsp;·&nbsp; size ≈ <b>${cellW} × ${cellH} mm</b>`;
-  const flowDesc = state.flow === 'column' ? 'down cols ⬇️' : 'across rows ➡️';
-  $('#capText').innerHTML = `<b>${cols} × ${rows}</b> per sheet (${flowDesc}) &nbsp;·&nbsp; <b>${perSheet}</b> fit on one A4${dim}`;
-  $('#stats').textContent = `${numbers.length} sticker${numbers.length !== 1 ? 's' : ''} · ${perSheet}/sheet · ${sheetCount} A4 sheet${sheetCount !== 1 ? 's' : ''}`;
-  $('#chip').textContent = `${numbers.length} stickers · ${sheetCount} sheet${sheetCount !== 1 ? 's' : ''}`;
-  
+  const flowDesc = flow === 'column' ? `down cols (${multiply}× col${multiply !== 1 ? 's' : ''})` : `across rows (${multiply}×)`;
+  const alignDesc = align === 'left' ? 'left-aligned ⇤' : 'centered ⇥⇤';
+  $('#capText').innerHTML = `<b>${alignDesc}</b> &nbsp;·&nbsp; <b>${flowDesc}</b> &nbsp;·&nbsp; <b>${maxCols} × ${maxRows}</b> max/sheet${dim}`;
+  $('#stats').textContent = `${totalStickersCount} sticker${totalStickersCount !== 1 ? 's' : ''} (${baseNumbers.length} × ${multiply}) · ${sheetCount} A4 sheet${sheetCount !== 1 ? 's' : ''}`;
+  $('#chip').textContent = `${totalStickersCount} stickers · ${sheetCount} sheet${sheetCount !== 1 ? 's' : ''}`;
+
   const shapeLabel = SHAPES[state.shape].label + (state.shape === 'rect' ? (state.orientation === 'vertical' ? ' · vert' : ' · horiz') : '');
   $('#pillShape').textContent = shapeLabel + (state.outline ? ' · outline' : '') + (state.dot ? ' · 1. 2. 3.' : '');
   $('#pillSize').textContent = size + ' mm';
   if($('#pillGap')) $('#pillGap').textContent = 'gap ' + gap + ' mm';
+  if($('#pillAlign')) $('#pillAlign').textContent = align === 'left' ? 'left ⇤' : 'center ⇥';
+  if($('#pillMult')) $('#pillMult').textContent = `${multiply}× col`;
   const varSuffix = state.fontVariation !== 'uniform' ? ` · ${state.fontVariation}` : '';
   $('#pillFont').textContent = `${state.font} · ${state.fontScale}%${varSuffix}`;
 
@@ -922,63 +1040,70 @@ function syncToggles(){
 }
 
 /* ---------- PNG export (150 dpi A4 = 1240×1754) ---------- */
-async function downloadPNGs(){
-  if(!build) return;
-  toast('Rendering PNG sheets…');
+async function downloadPNGs(singleSheetIdx = null){
+  if(!build || !build.sheets) return;
+  const isSingle = typeof singleSheetIdx === 'number';
+  toast(isSingle ? `Rendering Sheet ${singleSheetIdx + 1} PNG…` : 'Rendering PNG sheets…');
   await document.fonts.ready;
-  const W=1240,H=1754, k=W/PAGE_W;
+  const W=1240, H=1754, k=W/PAGE_W;
   const theme=currentTheme(), ring=theme.ring||'#FFFFFF', F=FONTS[state.font];
   const s = getShapeSpec();
-  const {cols,rows,gap,perSheet,cellW,cellH}=build;
-  const totalW=cols*cellW+(cols-1)*gap, totalH=rows*cellH+(rows-1)*gap;
-  const ox=(PAGE_W-totalW)/2, oy=(PAGE_H-totalH)/2;
+  const {gap, cellW, cellH, align} = build;
 
-  for(let sh=0;sh<build.sheetCount;sh++){
+  const startSh = isSingle ? singleSheetIdx : 0;
+  const endSh = isSingle ? singleSheetIdx + 1 : build.sheetCount;
+
+  for(let shIdx=startSh; shIdx<endSh; shIdx++){
+    const sheetData = build.sheets[shIdx];
     const c=document.createElement('canvas'); c.width=W; c.height=H;
     const ctx=c.getContext('2d');
     ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
-    const chunk=build.numbers.slice(sh*perSheet,(sh+1)*perSheet);
-    chunk.forEach((n,i)=>{
-      let col, row;
-      if(state.flow === 'column'){
-        row = i % rows;
-        col = Math.floor(i / rows);
-      } else {
-        col = i % cols;
-        row = Math.floor(i / cols);
-      }
-      const x=ox+col*(cellW+gap), y=oy+row*(cellH+gap);
-      const globalIdx = sh * perSheet + i;
-      const color = state.alt ? theme.colors[globalIdx % theme.colors.length] : theme.colors[0];
+
+    let ox, oy;
+    if(align === 'center'){
+      const totalW = sheetData.cols * cellW + (sheetData.cols - 1) * gap;
+      const totalH = sheetData.rows * cellH + (sheetData.rows - 1) * gap;
+      ox = (PAGE_W - totalW) / 2;
+      oy = (PAGE_H - totalH) / 2;
+    } else {
+      ox = MARGIN;
+      oy = MARGIN;
+    }
+
+    sheetData.cells.forEach(cellData => {
+      const x = ox + cellData.col * (cellW + gap);
+      const y = oy + cellData.row * (cellH + gap);
+      const color = state.alt ? theme.colors[cellData.globalIdx % theme.colors.length] : theme.colors[0];
       ctx.save();
-      ctx.translate(x*k,y*k);
-      const sc=cellH*k/s.h; ctx.scale(sc,sc);
+      ctx.translate(x*k, y*k);
+      const sc = cellH * k / s.h; ctx.scale(sc, sc);
       if(state.guides){
-        ctx.save(); ctx.translate(s.cx,s.cy); ctx.scale(1.13,1.13); ctx.translate(-s.cx,-s.cy);
-        ctx.setLineDash([5,5]); ctx.strokeStyle='#BCC3D2'; ctx.lineWidth=1.4;
+        ctx.save(); ctx.translate(s.cx, s.cy); ctx.scale(1.13, 1.13); ctx.translate(-s.cx, -s.cy);
+        ctx.setLineDash([5, 5]); ctx.strokeStyle='#BCC3D2'; ctx.lineWidth=1.4;
         ctx.stroke(new Path2D(s.d)); ctx.restore();
       }
-      const p=new Path2D(s.d);
+      const p = new Path2D(s.d);
       ctx.fillStyle = state.outline ? '#FFFFFF' : color;
       ctx.fill(p);
-      ctx.lineJoin='round';
+      ctx.lineJoin = 'round';
       ctx.strokeStyle = state.outline ? color : ring;
-      ctx.lineWidth=6; ctx.stroke(p);
+      ctx.lineWidth = 6; ctx.stroke(p);
       ctx.fillStyle = state.outline ? '#232738' : inkFor(color);
-      ctx.font=`${F.weight} ${fontSize(n,s,globalIdx)}px '${F.family}'`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(labelFor(n),s.cx,s.cy+2);
+      ctx.font = `${F.weight} ${fontSize(cellData.n, s, cellData.globalIdx)}px '${F.family}'`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(labelFor(cellData.n), s.cx, s.cy + 2);
       ctx.restore();
     });
+
     await new Promise(res=>c.toBlob(b=>{
       const a=document.createElement('a');
       a.href=URL.createObjectURL(b);
-      a.download=`stickers-sheet-${sh+1}-of-${build.sheetCount}.png`;
+      a.download=`stickers-sheet-${shIdx+1}-of-${build.sheetCount}.png`;
       a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); res();
     },'image/png'));
-    await new Promise(r=>setTimeout(r,350));
+    if(!isSingle && shIdx < endSh - 1) await new Promise(r=>setTimeout(r,350));
   }
-  toast('Done! Check your downloads 📥');
+  toast(isSingle ? `Sheet ${singleSheetIdx + 1} PNG downloaded! 📥` : 'Done! Check your downloads 📥');
 }
 
 /* ---------- zoom controls ---------- */
@@ -1243,28 +1368,104 @@ function initDirectionControls(){
   });
 }
 
+/* ---------- multiply columns controls ---------- */
+function updateMultPresets(){
+  const chips = document.querySelectorAll('#multPresets .range-chip');
+  chips.forEach(chip => {
+    const m = parseInt(chip.dataset.mult, 10);
+    chip.classList.toggle('sel', m === state.multiply);
+  });
+}
+
+function setMultiply(v){
+  v = Math.max(1, Math.min(10, Math.round(v)));
+  if(v === state.multiply) return;
+  state.multiply = v;
+  if($('#multInput')) $('#multInput').value = v;
+  if($('#multVal')) $('#multVal').textContent = `${v}× (${v === 1 ? 'Single' : v + ' columns'})`;
+  updateMultPresets();
+  render();
+  toast(`Multiplied to ${v}× columns 📑`);
+}
+
+function initMultControls(){
+  holdStep($('#multMinus'), () => setMultiply((state.multiply || 1) - 1));
+  holdStep($('#multPlus'), () => setMultiply((state.multiply || 1) + 1));
+
+  const multIn = $('#multInput');
+  if(multIn){
+    multIn.addEventListener('input', e => {
+      state.multiply = Math.max(1, +e.target.value);
+      if($('#multVal')) $('#multVal').textContent = `${state.multiply}× (${state.multiply === 1 ? 'Single' : state.multiply + ' columns'})`;
+      updateMultPresets();
+      schedule();
+    });
+  }
+
+  document.querySelectorAll('#multPresets .range-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const m = parseInt(chip.dataset.mult, 10);
+      setMultiply(m);
+    });
+  });
+}
+
+/* ---------- sheet alignment controls ---------- */
+function setAlignment(align){
+  if(state.align === align) return;
+  state.align = align;
+  syncAlignmentControls();
+  render();
+  toast(align === 'left' ? 'Starting stickers from left margin ⇤' : 'Centered stickers on sheet ⇥⇤');
+}
+
+function syncAlignmentControls(){
+  document.querySelectorAll('#alignGroup .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.align === (state.align || 'left'));
+  });
+}
+
+function initAlignmentControls(){
+  document.querySelectorAll('#alignGroup .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setAlignment(btn.dataset.align));
+  });
+}
+
 $('#ampoulePreset').onclick=()=>{
-  Object.assign(state,{from:1, to:30, shape:'rect', size:30, gap:3, orientation:'horizontal', flow:'row',
+  Object.assign(state,{from:1, to:30, shape:'rect', size:14, gap:0, orientation:'horizontal', flow:'column',
+                       align:'left', multiply:1,
                        outline:true, guides:true, alt:true, theme:'black', font:'Fredoka', fontScale:100, fontVariation:'uniform', dot:true});
-  $('#from').value=1; $('#to').value=30; $('#size').value=30;
-  if($('#gapInput')) $('#gapInput').value = 3;
-  if($('#gapVal')) $('#gapVal').textContent = '3 mm';
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); updateGapPresets();
+  $('#from').value=1; $('#to').value=30; $('#size').value=14;
+  if($('#sizeVal')) $('#sizeVal').textContent = '14 mm';
+  if($('#gapInput')) $('#gapInput').value = 0;
+  if($('#gapVal')) $('#gapVal').textContent = '0 mm';
+  if($('#multInput')) $('#multInput').value = 1;
+  if($('#multVal')) $('#multVal').textContent = '1× (Single)';
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateGapPresets(); updateMultPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
-  toast('Ampoule preset applied 🧪 30 × 18.75 mm · 1. 2. 3.');
+  toast('Ampoule preset applied 🧪 14 mm size · 0 mm gap · down cols · 1. 2. 3.');
 };
 
-$('#printBtn').onclick=()=>{toast('Opening print dialog — pick “Save as PDF” 🖨'); setTimeout(()=>window.print(),350);};
-$('#pngBtn').onclick=downloadPNGs;
+const triggerPrint = () => {
+  toast('Opening print dialog — pick “Save as PDF” 🖨');
+  setTimeout(() => window.print(), 350);
+};
+
+$('#printBtn').onclick = triggerPrint;
+$('#pngBtn').onclick = () => downloadPNGs();
+
 $('#resetBtn').onclick=()=>{
   Object.assign(state, DEFAULTS);
   $('#from').value=DEFAULTS.from; $('#to').value=DEFAULTS.to; $('#size').value=DEFAULTS.size;
+  if($('#sizeVal')) $('#sizeVal').textContent = DEFAULTS.size + ' mm';
   if($('#gapInput')) $('#gapInput').value = DEFAULTS.gap;
   if($('#gapVal')) $('#gapVal').textContent = DEFAULTS.gap + ' mm';
+  if($('#multInput')) $('#multInput').value = DEFAULTS.multiply;
+  if($('#multVal')) $('#multVal').textContent = '1× (Single)';
   setZoom('fit'); setMobileView('controls');
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); updateGapPresets();
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateGapPresets(); updateMultPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
-  toast('Back to defaults ✨ border-only black labels');
+  toast('Back to defaults ✨ 14 mm size · 0 mm gap · down cols');
 };
 
 document.getElementById('starDeco').setAttribute('d',starD());
@@ -1278,7 +1479,9 @@ initFontSizeControls();
 initMobileAndRangeControls();
 initGapControls();
 initDirectionControls();
-buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); render();
+initMultControls();
+initAlignmentControls();
+buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateMultPresets(); render();
 </script>
 <div class="mobile-bar" id="mobileBar">
   <button type="button" class="m-bar-btn" id="mBarToggle">
