@@ -399,9 +399,19 @@
         <div class="sublbl" style="margin-top:0">Sticker size (1 mm steps)</div>
         <div class="sliderrow">
           <button type="button" class="stepBtn" id="minus" title="-1 mm">−</button>
-          <input type="range" id="size" min="10" max="90" step="1" value="14">
+          <input type="range" id="size" min="4" max="90" step="1" value="14">
           <button type="button" class="stepBtn" id="plus" title="+1 mm">+</button>
           <div class="sizeval" id="sizeVal">14 mm</div>
+        </div>
+        <div class="range-presets" id="sizePresets" style="margin-bottom:12px">
+          <button type="button" class="range-chip" data-size="6">6 mm (Micro)</button>
+          <button type="button" class="range-chip" data-size="8">8 mm (Tiny)</button>
+          <button type="button" class="range-chip" data-size="10">10 mm (Mini)</button>
+          <button type="button" class="range-chip" data-size="12">12 mm (Compact)</button>
+          <button type="button" class="range-chip sel" data-size="14">14 mm (Default)</button>
+          <button type="button" class="range-chip" data-size="18">18 mm (Small)</button>
+          <button type="button" class="range-chip" data-size="25">25 mm (Medium)</button>
+          <button type="button" class="range-chip" data-size="35">35 mm (Large)</button>
         </div>
 
         <div class="sublbl">Space between stickers (Gap)</div>
@@ -577,8 +587,8 @@
 <script>
 const $ = s => document.querySelector(s);
 const PXMM = 96 / 25.4;
-const PAGE_W = 210, PAGE_H = 297, MARGIN = 10, MAX_STICKERS = 800;
-const SIZE_MIN = 10, SIZE_MAX = 90;
+const PAGE_W = 210, PAGE_H = 297, MARGIN = 10, MAX_STICKERS = 1200;
+const SIZE_MIN = 4, SIZE_MAX = 90;
 const FONT_SCALE_MIN = 50, FONT_SCALE_MAX = 180;
 const MIXED_JITTER = [0.88, 1.14, 0.93, 1.18, 0.85, 1.10, 0.97, 1.16, 0.90, 1.12, 1.05, 0.86];
 
@@ -904,6 +914,8 @@ function render(keepInputs = false){
   };
 
   $('#sizeVal').textContent = size + ' mm';
+  if($('#size') && document.activeElement !== $('#size')) $('#size').value = size;
+  if(typeof updateSizePresets === 'function') updateSizePresets();
   if($('#gapVal')) $('#gapVal').textContent = gap + ' mm';
   if($('#gapInput') && document.activeElement !== $('#gapInput')) $('#gapInput').value = gap;
   if(typeof updateGapPresets === 'function') updateGapPresets();
@@ -958,11 +970,33 @@ new ResizeObserver(layout).observe($('#scroll'));
 window.addEventListener('resize',layout);
 window.addEventListener('orientationchange',()=>setTimeout(layout,200));
 
-/* ---------- 1 mm stepper (hold-to-repeat) ---------- */
+/* ---------- sticker size controls ---------- */
+function updateSizePresets(){
+  const chips = document.querySelectorAll('#sizePresets .range-chip');
+  chips.forEach(chip => {
+    const sz = parseInt(chip.dataset.size, 10);
+    chip.classList.toggle('sel', sz === state.size);
+  });
+}
+
 function setSize(v){
-  v=Math.max(SIZE_MIN,Math.min(SIZE_MAX,v));
-  if(v===state.size) return;
-  state.size=v; $('#size').value=v; render();
+  v = Math.max(SIZE_MIN, Math.min(SIZE_MAX, Math.round(v)));
+  if(v === state.size) return;
+  state.size = v;
+  if($('#size')) $('#size').value = v;
+  if($('#sizeVal')) $('#sizeVal').textContent = v + ' mm';
+  updateSizePresets();
+  render();
+}
+
+function initSizeControls(){
+  document.querySelectorAll('#sizePresets .range-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const sz = parseInt(chip.dataset.size, 10);
+      setSize(sz);
+      toast(`Sticker size set to ${sz} mm 📏`);
+    });
+  });
 }
 function holdStep(btn, stepFn){
   btn.addEventListener('click',()=>stepFn());
@@ -1212,7 +1246,12 @@ $('#to').addEventListener('change', () => commitRange(true));
   });
 });
 
-$('#size').addEventListener('input',e=>{state.size=+e.target.value; schedule();});
+$('#size').addEventListener('input', e => {
+  state.size = Math.max(SIZE_MIN, Math.min(SIZE_MAX, +e.target.value));
+  if($('#sizeVal')) $('#sizeVal').textContent = state.size + ' mm';
+  updateSizePresets();
+  schedule();
+});
 $('#alt').addEventListener('change',e=>{state.alt=e.target.checked; render();});
 $('#guides').addEventListener('change',e=>{state.guides=e.target.checked; render();});
 $('#outline').addEventListener('change',e=>{state.outline=e.target.checked; render();});
@@ -1441,7 +1480,7 @@ $('#ampoulePreset').onclick=()=>{
   if($('#gapVal')) $('#gapVal').textContent = '0 mm';
   if($('#multInput')) $('#multInput').value = 1;
   if($('#multVal')) $('#multVal').textContent = '1× (Single)';
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateGapPresets(); updateMultPresets();
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
   toast('Ampoule preset applied 🧪 14 mm size · 0 mm gap · down cols · 1. 2. 3.');
 };
@@ -1463,7 +1502,7 @@ $('#resetBtn').onclick=()=>{
   if($('#multInput')) $('#multInput').value = DEFAULTS.multiply;
   if($('#multVal')) $('#multVal').textContent = '1× (Single)';
   setZoom('fit'); setMobileView('controls');
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateGapPresets(); updateMultPresets();
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
   toast('Back to defaults ✨ 14 mm size · 0 mm gap · down cols');
 };
@@ -1475,13 +1514,14 @@ document.getElementById('starDeco').setAttribute('stroke-width','6');
 document.getElementById('starDeco').setAttribute('stroke-linejoin','round');
 document.getElementById('logoStar').setAttribute('d',starD(50,31));
 
+initSizeControls();
 initFontSizeControls();
 initMobileAndRangeControls();
 initGapControls();
 initDirectionControls();
 initMultControls();
 initAlignmentControls();
-buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateMultPresets(); render();
+buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets(); render();
 </script>
 <div class="mobile-bar" id="mobileBar">
   <button type="button" class="m-bar-btn" id="mBarToggle">
