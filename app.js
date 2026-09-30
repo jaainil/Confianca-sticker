@@ -1164,7 +1164,7 @@ function applyContainerPreset(name, size){
 }
 
 $('#preset1mlAmpoule')?.addEventListener('click', () => applyContainerPreset('1 ml Ampoule', 6));
-$('#preset1mlVial')?.addEventListener('click', () => applyContainerPreset('1 ml Vial', 6));
+$('#preset1mlVial')?.addEventListener('click', () => applyContainerPreset('1 ml Vial', 10));
 $('#preset10mlAmpoule')?.addEventListener('click', () => applyContainerPreset('10 ml Ampoule', 10));
 $('#preset10mlVial')?.addEventListener('click', () => applyContainerPreset('10 ml Vial', 10));
 $('#ampoulePreset')?.addEventListener('click', () => applyContainerPreset('1 ml Ampoule', 6));
