@@ -20,8 +20,14 @@
     font-family:'Nunito',sans-serif; color:var(--ink); background:var(--bg);
     background-image:radial-gradient(#CBD5E6 1.3px, transparent 1.3px);
     background-size:22px 22px; -webkit-tap-highlight-color:transparent;
+    overflow-x:hidden;
   }
-  button, .switch, input[type=range], input[type=color]{touch-action:manipulation}
+  button, .switch, input[type=range], input[type=color], input[type=number]{touch-action:manipulation}
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance:none; margin:0;
+  }
+  input[type=number]{-moz-appearance:textfield}
 
   .float{position:fixed; z-index:0; opacity:.55; pointer-events:none; animation:bob 6s ease-in-out infinite alternate}
   .float svg{display:block; filter:drop-shadow(3px 4px 0 rgba(35,39,56,.18))}
@@ -58,6 +64,10 @@
   section:nth-of-type(3) .lbl::before{background:var(--blue)}
   section:nth-of-type(4) .lbl::before{background:var(--green)}
   section:nth-of-type(5) .lbl::before{background:var(--purple)}
+  section:nth-of-type(6) .lbl::before{background:var(--yellow)}
+  section:nth-of-type(7) .lbl::before{background:var(--pink)}
+  section:nth-of-type(8) .lbl::before{background:var(--blue)}
+  section:nth-of-type(9) .lbl::before{background:var(--green)}
 
   .presetRow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-bottom:14px; border-bottom:2px dashed #DCE2EE}
   .preset{background:var(--blue); border:2.5px solid var(--ink); border-radius:999px; padding:9px 16px;
@@ -73,6 +83,15 @@
     border-radius:12px; background:#fff; transition:box-shadow .15s}
   .field input:focus{outline:none; box-shadow:0 0 0 3px var(--yellow)}
   .arrow{font-size:24px; font-weight:900; text-align:center; padding-bottom:8px}
+
+  .range-presets{display:flex; gap:6px; margin-top:9px; flex-wrap:wrap}
+  .range-chip{background:#F0F4FA; border:2px solid var(--ink); border-radius:999px;
+    padding:3px 10px; font:800 11.5px 'Nunito',sans-serif; color:#454B5E; cursor:pointer;
+    box-shadow:2px 2px 0 var(--ink); transition:transform .12s, background .12s, box-shadow .12s}
+  .range-chip:hover{transform:translateY(-1px); background:#FFE89E}
+  .range-chip.sel{background:var(--yellow); color:var(--ink); transform:rotate(-2deg)}
+  .range-chip:active{transform:translate(1px,1px); box-shadow:0 0 0 var(--ink)}
+  .range-hint{font-size:11px; font-weight:800; color:#E0533C; margin-top:5px; min-height:15px}
 
   .sliderrow{display:flex; align-items:center; gap:8px}
   .stepBtn{width:38px; height:38px; flex:none; border:2.5px solid var(--ink); border-radius:10px;
@@ -117,6 +136,38 @@
   .fontbtn span{font-size:10px; font-weight:900; color:#6B7387}
   .fontbtn:hover{transform:translateY(-3px)}
   .fontbtn.sel{background:#DFF3FF; box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg)}
+ 
+  .fs-presets{display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:10px}
+  .fs-btn{border:2.5px solid var(--ink); border-radius:12px; background:#fff; padding:6px 2px;
+    cursor:pointer; display:grid; place-items:center; gap:2px; transition:transform .14s, background .14s, box-shadow .14s}
+  .fs-btn span.fs-sample{font-weight:900; line-height:1; display:flex; align-items:center; justify-content:center; height:24px; color:var(--ink)}
+  .fs-btn span.fs-label{font-size:10px; font-weight:900; color:#5A6277}
+  .fs-btn:hover{transform:translateY(-2px)}
+  .fs-btn.sel{background:var(--yellow); transform:rotate(-2deg); box-shadow:3px 3px 0 var(--ink)}
+  .fs-btn.sel span.fs-label{color:var(--ink)}
+
+  .sublbl{font-size:10.5px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:#5A6277;
+    margin:12px 0 8px; display:flex; align-items:center; gap:6px}
+  .sublbl::before{content:""; width:7px; height:7px; border-radius:2px; border:1.5px solid var(--ink); background:var(--pink)}
+
+  .varmodes{display:grid; grid-template-columns:repeat(4,1fr); gap:6px}
+  .varmode-btn{border:2.5px solid var(--ink); border-radius:10px; background:#fff; padding:7px 2px;
+    cursor:pointer; text-align:center; transition:transform .14s, background .14s, box-shadow .14s;
+    font-size:10px; font-weight:900; display:flex; flex-direction:column; align-items:center; gap:3px; color:#5A6277}
+  .varmode-btn .varmode-icon{font-size:13px; font-weight:900; line-height:1; color:var(--ink)}
+  .varmode-btn:hover{transform:translateY(-2px)}
+  .varmode-btn.sel{background:#DFF3FF; box-shadow:2.5px 2.5px 0 var(--ink); transform:rotate(-1.5deg); color:var(--ink)}
+
+  .dir-row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .dir-btn{
+    border:2.5px solid var(--ink); border-radius:12px; background:#fff; padding:8px 6px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+    font:900 12.5px 'Nunito',sans-serif; color:#454B5E; transition:transform .14s, background .14s, box-shadow .14s;
+  }
+  .dir-btn .dir-icon{font-size:16px; line-height:1}
+  .dir-btn:hover{transform:translateY(-2px)}
+  .dir-btn.sel{background:var(--yellow); color:var(--ink); box-shadow:3px 3px 0 var(--ink); transform:rotate(-1deg)}
+  .dir-btn:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
 
   .toggles{display:grid; gap:11px}
   .switch{display:flex; align-items:center; gap:11px; cursor:pointer; font-weight:800; font-size:14px}
@@ -143,8 +194,12 @@
   .preview{padding:16px; display:flex; flex-direction:column}
   .pbar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:13px}
   .pstats{font-weight:900; font-size:13.5px}
+  .pbar-right{display:flex; align-items:center; gap:5px; flex-wrap:wrap}
+  .zoom-group{display:inline-flex; border:2px solid var(--ink); border-radius:999px; overflow:hidden; background:#fff; box-shadow:2px 2px 0 var(--ink); margin-right:4px}
+  .zoom-btn{border:none; background:transparent; padding:3px 9px; font:900 11px 'Nunito',sans-serif; color:#5A6277; cursor:pointer; transition:background .12s, color .12s}
+  .zoom-btn.active{background:var(--yellow); color:var(--ink)}
   .pill{background:#FFF3CC; border:2px solid var(--ink); border-radius:999px; padding:3px 11px;
-    font-size:12px; font-weight:900; display:inline-block; margin:2px 6px 2px 0}
+    font-size:12px; font-weight:900; display:inline-block; margin:2px 3px 2px 0}
   .previewScroll{flex:1; overflow:auto; border:2px dashed #C4CFE3; border-radius:16px;
     padding:20px; background:#F6F9FE; min-height:65vh; -webkit-overflow-scrolling:touch}
   #fitBox{margin:0 auto}
@@ -172,29 +227,89 @@
     max-width:90vw; text-align:center}
   #toast.show{transform:translateX(-50%) translateY(0); opacity:1}
 
+  /* ---------- mobile tabs & bar ---------- */
+  .mobile-tabs{display:none}
+  .mobile-bar{display:none}
+
+  /* ---------- responsive layout ---------- */
+  @media(max-width:860px){
+    .mobile-tabs{
+      display:flex; background:#E2E8F4; border:2.5px solid var(--ink); border-radius:14px;
+      padding:4px; gap:6px; margin-bottom:14px; box-shadow:var(--shadow); position:sticky; top:10px; z-index:40;
+    }
+    .m-tab{
+      flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+      padding:10px 12px; border:2px solid transparent; border-radius:10px; background:transparent;
+      font:900 13.5px 'Nunito',sans-serif; color:#5A6277; cursor:pointer; transition:all .14s ease;
+    }
+    .m-tab.active{
+      background:#fff; color:var(--ink); border-color:var(--ink); box-shadow:2px 2px 0 var(--ink);
+    }
+    .m-tab-badge{
+      background:var(--pink); color:#fff; border:1.5px solid var(--ink); border-radius:999px;
+      padding:1px 7px; font-size:11px; font-weight:900;
+    }
+    main.layout{display:flex; flex-direction:column; gap:16px}
+    main.layout.view-controls .preview{display:none}
+    main.layout.view-controls .controls{display:block}
+    main.layout.view-preview .controls{display:none}
+    main.layout.view-preview .preview{display:flex}
+
+    .mobile-bar{
+      display:flex; position:fixed; left:12px; right:12px; bottom:12px; z-index:90;
+      gap:8px; background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px); padding:7px 10px; border:2.5px solid var(--ink);
+      border-radius:999px; box-shadow:0 8px 24px rgba(35,39,56,.25);
+    }
+    .m-bar-btn{
+      flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 12px; font:900 13px 'Nunito',sans-serif; border:2px solid var(--ink);
+      border-radius:999px; background:#fff; cursor:pointer; box-shadow:2px 2px 0 var(--ink);
+      color:var(--ink); transition:transform .12s, box-shadow .12s;
+    }
+    .m-bar-btn:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
+    .m-bar-btn.primary{background:var(--yellow)}
+    .wrap{padding-bottom:80px}
+    #toast{bottom:76px}
+  }
+
   /* ---------- small screens ---------- */
   @media(max-width:640px){
-    .wrap{padding:12px}
-    header{margin-bottom:14px}
+    .wrap{padding:10px; padding-bottom:85px}
+    header{margin-bottom:12px; gap:8px}
+    .logo{width:44px; height:44px}
+    h1{font-size:23px}
+    .tagline{font-size:11px}
+    .chip{padding:5px 11px; font-size:11.5px}
     .controls{padding:14px}
     .preview{padding:12px}
-    .previewScroll{padding:10px; min-height:45vh}
-    .field input{font-size:19px; padding:8px 10px}
+    .previewScroll{padding:8px; min-height:48vh}
+    .field input{font-size:18px; padding:7px 9px}
     .tiles{gap:5px}
     .tile svg{width:26px; height:19px}
-    .swrow{gap:9px}
+    .swrow{gap:8px}
+    .sw{width:34px; height:34px}
+    .presetRow{gap:6px}
+    .preset{padding:7px 13px; font-size:12px}
     .presetNote{display:none}
     .hint{font-size:11.5px}
+    .fs-presets{gap:5px}
+    .fs-btn{padding:5px 1px}
+    .fs-btn span.fs-label{font-size:9px}
+    .varmodes{gap:5px}
+    .varmode-btn{padding:6px 1px; font-size:9px}
+    .dir-btn{padding:7px 4px; font-size:11.5px; gap:5px}
   }
 
   /* ---------- print ---------- */
   @page{size:A4; margin:0}
   @media print{
     body{background:#fff}
-    header, aside, .pbar, .hint, footer, .float, #toast{display:none !important}
-    .wrap{max-width:none; padding:0}
+    header, aside, .pbar, .hint, footer, .float, #toast, .mobile-tabs, .mobile-bar{display:none !important}
+    .wrap{max-width:none; padding:0; padding-bottom:0}
     main.layout{display:block}
-    .preview{border:none; box-shadow:none; padding:0; border-radius:0}
+    main.layout .controls{display:none !important}
+    main.layout .preview{display:block !important; border:none; box-shadow:none; padding:0; border-radius:0}
     .previewScroll{overflow:visible; border:none; padding:0; background:none; min-height:0}
     #fitBox{width:auto !important; height:auto !important; margin:0}
     #printRoot{transform:none !important}
@@ -227,7 +342,19 @@
     <div class="chip" id="chip">…</div>
   </header>
 
-  <main class="layout">
+  <div class="mobile-tabs" id="mobileTabs">
+    <button type="button" class="m-tab active" id="tabControls" data-target="controls">
+      <span class="m-tab-icon">⚙️</span>
+      <span>Customize</span>
+    </button>
+    <button type="button" class="m-tab" id="tabPreview" data-target="preview">
+      <span class="m-tab-icon">📄</span>
+      <span>Sheet Preview</span>
+      <span class="m-tab-badge" id="mTabBadge">1</span>
+    </button>
+  </div>
+
+  <main class="layout view-controls">
 
     <aside class="panel controls">
 
@@ -243,22 +370,73 @@
           <div class="arrow">→</div>
           <div class="field"><label for="to">TO</label><input id="to" type="number" inputmode="numeric" min="0" max="999" value="30"></div>
         </div>
+        <div class="range-presets" id="rangePresets">
+          <button type="button" class="range-chip sel" data-from="1" data-to="30">1–30</button>
+          <button type="button" class="range-chip" data-from="1" data-to="10">1–10</button>
+          <button type="button" class="range-chip" data-from="1" data-to="50">1–50</button>
+          <button type="button" class="range-chip" data-from="1" data-to="100">1–100</button>
+          <button type="button" class="range-chip" data-from="101" data-to="200">101–200</button>
+        </div>
+        <div class="range-hint" id="rangeHint"></div>
       </section>
 
       <section>
-        <div class="lbl">Sticker size (1 mm steps)</div>
+        <div class="lbl">Sticker size & spacing</div>
+        <div class="sublbl" style="margin-top:0">Sticker size (1 mm steps)</div>
         <div class="sliderrow">
-          <button class="stepBtn" id="minus" title="-1 mm">−</button>
+          <button type="button" class="stepBtn" id="minus" title="-1 mm">−</button>
           <input type="range" id="size" min="10" max="90" step="1" value="42">
-          <button class="stepBtn" id="plus" title="+1 mm">+</button>
+          <button type="button" class="stepBtn" id="plus" title="+1 mm">+</button>
           <div class="sizeval" id="sizeVal">42 mm</div>
         </div>
+
+        <div class="sublbl">Space between stickers (Gap)</div>
+        <div class="sliderrow">
+          <button type="button" class="stepBtn" id="gapMinus" title="-0.5 mm">−</button>
+          <input type="range" id="gapInput" min="0" max="16" step="0.5" value="4">
+          <button type="button" class="stepBtn" id="gapPlus" title="+0.5 mm">+</button>
+          <div class="sizeval" id="gapVal">4 mm</div>
+        </div>
+        <div class="range-presets" id="gapPresets">
+          <button type="button" class="range-chip" data-gap="0">0 mm (Flush)</button>
+          <button type="button" class="range-chip" data-gap="2">2 mm (Tight)</button>
+          <button type="button" class="range-chip sel" data-gap="4">4 mm (Normal)</button>
+          <button type="button" class="range-chip" data-gap="8">8 mm (Wide)</button>
+        </div>
+
         <div class="cap" id="capText"></div>
       </section>
 
       <section>
         <div class="lbl">Shape</div>
         <div class="tiles" id="shapes"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Direction & Orientation</div>
+        <div class="sublbl" style="margin-top:0">Sticker orientation</div>
+        <div class="dir-row" id="orientGroup">
+          <button type="button" class="dir-btn sel" data-orient="horizontal" title="Horizontal / Landscape orientation">
+            <span class="dir-icon">↔</span>
+            <span class="dir-label">Horizontal</span>
+          </button>
+          <button type="button" class="dir-btn" data-orient="vertical" title="Vertical / Portrait orientation">
+            <span class="dir-icon">↕</span>
+            <span class="dir-label">Vertical</span>
+          </button>
+        </div>
+
+        <div class="sublbl">Numbering sequence flow</div>
+        <div class="dir-row" id="flowGroup">
+          <button type="button" class="dir-btn sel" data-flow="row" title="Fill left to right across rows">
+            <span class="dir-icon">➡️</span>
+            <span class="dir-label">Across (Rows)</span>
+          </button>
+          <button type="button" class="dir-btn" data-flow="column" title="Fill top to bottom down columns">
+            <span class="dir-icon">⬇️</span>
+            <span class="dir-label">Down (Columns)</span>
+          </button>
+        </div>
       </section>
 
       <section>
@@ -269,6 +447,53 @@
       <section>
         <div class="lbl">Number font</div>
         <div class="fontrow" id="fonts"></div>
+      </section>
+
+      <section>
+        <div class="lbl">Font size variations</div>
+        <div class="fs-presets" id="fsPresets">
+          <button type="button" class="fs-btn" data-scale="75" title="Compact size (75%)">
+            <span class="fs-sample" style="font-size:13px">12</span>
+            <span class="fs-label">Small</span>
+          </button>
+          <button type="button" class="fs-btn sel" data-scale="100" title="Regular size (100%)">
+            <span class="fs-sample" style="font-size:17px">12</span>
+            <span class="fs-label">Regular</span>
+          </button>
+          <button type="button" class="fs-btn" data-scale="125" title="Large size (125%)">
+            <span class="fs-sample" style="font-size:21px">12</span>
+            <span class="fs-label">Large</span>
+          </button>
+          <button type="button" class="fs-btn" data-scale="150" title="Jumbo size (150%)">
+            <span class="fs-sample" style="font-size:25px">12</span>
+            <span class="fs-label">Jumbo</span>
+          </button>
+        </div>
+        <div class="sliderrow">
+          <button type="button" class="stepBtn" id="fsMinus" title="-5%">−</button>
+          <input type="range" id="fontScale" min="50" max="180" step="5" value="100">
+          <button type="button" class="stepBtn" id="fsPlus" title="+5%">+</button>
+          <div class="sizeval" id="fontScaleVal">100%</div>
+        </div>
+        <div class="sublbl">Variation style</div>
+        <div class="varmodes" id="varModes">
+          <button type="button" class="varmode-btn sel" data-mode="uniform" title="Same font size for all stickers">
+            <span class="varmode-icon">══</span>
+            <span>Uniform</span>
+          </button>
+          <button type="button" class="varmode-btn" data-mode="mixed" title="Playful varied font sizes across stickers">
+            <span class="varmode-icon">🔀</span>
+            <span>Mixed</span>
+          </button>
+          <button type="button" class="varmode-btn" data-mode="alt" title="Alternating smaller and larger font sizes">
+            <span class="varmode-icon">⇋</span>
+            <span>Alternate</span>
+          </button>
+          <button type="button" class="varmode-btn" data-mode="autofit" title="Dynamically fit font size to number digits">
+            <span class="varmode-icon">📐</span>
+            <span>Auto-Fit</span>
+          </button>
+        </div>
       </section>
 
       <section>
@@ -297,7 +522,16 @@
     <section class="panel preview">
       <div class="pbar">
         <div class="pstats" id="stats"></div>
-        <div><span class="pill" id="pillShape"></span><span class="pill" id="pillSize"></span></div>
+        <div class="pbar-right">
+          <div class="zoom-group">
+            <button type="button" class="zoom-btn active" id="zoomFit" title="Fit sheet to screen width">Fit</button>
+            <button type="button" class="zoom-btn" id="zoom100" title="100% actual print size">100%</button>
+          </div>
+          <span class="pill" id="pillShape"></span>
+          <span class="pill" id="pillSize"></span>
+          <span class="pill" id="pillGap"></span>
+          <span class="pill" id="pillFont"></span>
+        </div>
       </div>
       <div class="previewScroll" id="scroll">
         <div id="fitBox"><div id="printRoot"></div></div>
@@ -317,6 +551,8 @@ const $ = s => document.querySelector(s);
 const PXMM = 96 / 25.4;
 const PAGE_W = 210, PAGE_H = 297, MARGIN = 10, MAX_STICKERS = 800;
 const SIZE_MIN = 10, SIZE_MAX = 90;
+const FONT_SCALE_MIN = 50, FONT_SCALE_MAX = 180;
+const MIXED_JITTER = [0.88, 1.14, 0.93, 1.18, 0.85, 1.10, 0.97, 1.16, 0.90, 1.12, 1.05, 0.86];
 
 const THEMES = {
   black:    {name:'Black',    colors:['#232738']},
@@ -342,6 +578,7 @@ function hexD(R=45){let p='';for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3
 const roundedD = 'M26,4 h48 a22,22 0 0 1 22,22 v48 a22,22 0 0 1 -22,22 h-48 a22,22 0 0 1 -22,-22 v-48 a22,22 0 0 1 22,-22 Z';
 const circleD  = 'M50,3.5 a46.5,46.5 0 1 0 0.01,0 Z';
 const rectD    = 'M21,3 h118 a18,18 0 0 1 18,18 v58 a18,18 0 0 1 -18,18 h-118 a18,18 0 0 1 -18,-18 v-58 a18,18 0 0 1 18,-18 Z';
+const rectVertD = 'M21,3 h58 a18,18 0 0 1 18,18 v118 a18,18 0 0 1 -18,18 h-58 a18,18 0 0 1 -18,-18 v-118 a18,18 0 0 1 18,-18 Z';
 
 const SHAPES = {
   rect:   {label:'Rect',   d:rectD,    cx:80, cy:50, w:160, h:100, vb:'-12 -12 184 124', ratio:0.625, fsf:1},
@@ -352,8 +589,17 @@ const SHAPES = {
 };
 const SHAPE_ORDER = ['rect','circle','square','hex','star'];
 
+function getShapeSpec(){
+  if(state.shape === 'rect' && state.orientation === 'vertical'){
+    return {label:'Rect (Vert)', d:rectVertD, cx:50, cy:80, w:100, h:160, vb:'-12 -12 124 184', ratio:1.6, fsf:0.88};
+  }
+  return SHAPES[state.shape] || SHAPES.rect;
+}
+
 /* DEFAULTS: border-only + black, ampoule-friendly */
-const DEFAULTS = {from:1, to:30, size:42, shape:'rect', theme:'black', font:'Fredoka',
+const DEFAULTS = {from:1, to:30, size:42, gap:4, orientation:'horizontal', flow:'row',
+                  shape:'rect', theme:'black', font:'Fredoka',
+                  fontScale:100, fontVariation:'uniform', zoom:'fit', mobileView:'controls',
                   alt:true, guides:true, outline:true, dot:false};
 const state = Object.assign({}, DEFAULTS, {customColor:'#1D6FE0'});
 let build = null;
@@ -372,30 +618,115 @@ function toast(msg){
   const t=$('#toast'); t.textContent=msg; t.classList.add('show');
   clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600);
 }
-function readRange(){
-  let f=parseInt($('#from').value,10), t=parseInt($('#to').value,10);
-  if(isNaN(f)) f=state.from; if(isNaN(t)) t=state.to;
-  f=Math.max(0,Math.min(999,f)); t=Math.max(0,Math.min(999,t));
-  if(f>t){[f,t]=[t,f]; $('#from').value=f; $('#to').value=t; toast('Swapped the range for you 🙂');}
-  if(t-f+1>MAX_STICKERS){ t=f+MAX_STICKERS-1; $('#to').value=t; toast('Capped at '+MAX_STICKERS+' stickers'); }
-  $('#from').value=f; $('#to').value=t;
-  state.from=f; state.to=t;
+
+function updateRangeChips(){
+  const chips = document.querySelectorAll('.range-chip');
+  chips.forEach(chip => {
+    const cf = parseInt(chip.dataset.from, 10);
+    const ct = parseInt(chip.dataset.to, 10);
+    chip.classList.toggle('sel', cf === state.from && ct === state.to);
+  });
+}
+
+function commitRange(notify = true){
+  const fromEl = $('#from');
+  const toEl = $('#to');
+  let f = parseInt(fromEl.value, 10);
+  let t = parseInt(toEl.value, 10);
+
+  if(isNaN(f)) f = state.from ?? 1;
+  if(isNaN(t)) t = state.to ?? Math.max(f, f + 29);
+
+  f = Math.max(0, Math.min(999, f));
+  t = Math.max(0, Math.min(999, t));
+
+  if(f > t){
+    [f, t] = [t, f];
+    if(notify) toast('Swapped range: ' + f + ' → ' + t + ' 🙂');
+  }
+
+  if(t - f + 1 > MAX_STICKERS){
+    t = f + MAX_STICKERS - 1;
+    if(notify) toast('Capped at ' + MAX_STICKERS + ' stickers');
+  }
+
+  fromEl.value = f;
+  toEl.value = t;
+  state.from = f;
+  state.to = t;
+  const hint = $('#rangeHint');
+  if(hint) hint.textContent = '';
+  updateRangeChips();
+  render(true);
+}
+
+function handleRangeInput(){
+  const fromEl = $('#from');
+  const toEl = $('#to');
+  const fromVal = fromEl.value.trim();
+  const toVal = toEl.value.trim();
+  const hint = $('#rangeHint');
+
+  // If user is actively clearing the field to type a new number, DO NOT overwrite!
+  if(fromVal === '' || toVal === ''){
+    if(hint) hint.textContent = 'Enter both numbers';
+    return;
+  }
+
+  const f = parseInt(fromVal, 10);
+  const t = parseInt(toVal, 10);
+
+  if(isNaN(f) || isNaN(t)){
+    if(hint) hint.textContent = 'Please enter valid numbers';
+    return;
+  }
+
+  if(f > t){
+    if(hint) hint.textContent = 'FROM (' + f + ') is greater than TO (' + t + ')';
+    return; // Don't swap while user is actively typing!
+  }
+
+  if(hint) hint.textContent = '';
+  const count = t - f + 1;
+  if(count > MAX_STICKERS){
+    if(hint) hint.textContent = 'Max ' + MAX_STICKERS + ' stickers allowed';
+    state.from = Math.max(0, f);
+    state.to = Math.min(999, f + MAX_STICKERS - 1);
+  } else {
+    state.from = Math.max(0, f);
+    state.to = Math.min(999, t);
+  }
+
+  updateRangeChips();
+  render(true); // keepInputs = true: do not overwrite the user's active inputs while typing!
 }
 function cellDims(){
-  const s=SHAPES[state.shape];
-  return {cellW:state.size, cellH:+(state.size*s.ratio).toFixed(2)};
+  const s = getShapeSpec();
+  if(state.shape === 'rect' && state.orientation === 'vertical'){
+    return {cellW: +(state.size * 0.625).toFixed(2), cellH: state.size};
+  }
+  return {cellW: state.size, cellH: +(state.size * s.ratio).toFixed(2)};
 }
 function labelFor(n){ return state.dot ? n + '.' : String(n); }
-function fontSize(n, spec){
+function fontSize(n, spec, index=0){
   const digits=String(n).length;
   const base = digits<=1?52 : digits===2?46 : digits===3?36 : 28;
-  return Math.round(base * spec.fsf * (state.dot ? 0.86 : 1));
+  let vMult = 1.0;
+  if(state.fontVariation==='mixed'){
+    vMult = MIXED_JITTER[index % MIXED_JITTER.length];
+  } else if(state.fontVariation==='alt'){
+    vMult = (index % 2 === 0) ? 0.88 : 1.15;
+  } else if(state.fontVariation==='autofit'){
+    vMult = digits<=1 ? 1.18 : digits===2 ? 1.0 : digits===3 ? 0.92 : 0.82;
+  }
+  const scale = (state.fontScale || 100) / 100;
+  return Math.max(8, Math.round(base * spec.fsf * (state.dot ? 0.86 : 1) * scale * vMult));
 }
 
 /* ---------- sticker SVG ---------- */
-function stickerSVG(n, themeColor, ring, guides){
-  const s=SHAPES[state.shape];
-  const fs = fontSize(n,s);
+function stickerSVG(n, themeColor, ring, guides, index=0){
+  const s = getShapeSpec();
+  const fs = fontSize(n,s,index);
   const F = FONTS[state.font];
   const fill   = state.outline ? '#FFFFFF' : themeColor;
   const stroke = state.outline ? themeColor : ring;
@@ -412,62 +743,94 @@ function stickerSVG(n, themeColor, ring, guides){
 }
 
 /* ---------- build sheets ---------- */
-function render(){
-  readRange();
-  const size=state.size;
-  const {cellW,cellH}=cellDims();
-  const gap = Math.min(8, Math.max(2, Math.round(size*0.1*10)/10));
-  const cols = Math.max(1, Math.floor((PAGE_W-2*MARGIN+gap)/(cellW+gap)));
-  const rows = Math.max(1, Math.floor((PAGE_H-2*MARGIN+gap)/(cellH+gap)));
-  const perSheet = cols*rows;
+function render(keepInputs = false){
+  if(!keepInputs){
+    $('#from').value = state.from;
+    $('#to').value = state.to;
+  }
+  updateRangeChips();
 
-  const numbers=[]; for(let n=state.from;n<=state.to;n++) numbers.push(n);
-  const sheetCount = Math.max(1, Math.ceil(numbers.length/perSheet));
+  const size = state.size;
+  const {cellW, cellH} = cellDims();
+  const gap = Math.max(0, Math.min(16, typeof state.gap === 'number' ? state.gap : 4));
+  const cols = Math.max(1, Math.floor((PAGE_W - 2 * MARGIN + gap) / (cellW + gap)));
+  const rows = Math.max(1, Math.floor((PAGE_H - 2 * MARGIN + gap) / (cellH + gap)));
+  const perSheet = cols * rows;
+
+  const numbers = []; for(let n = state.from; n <= state.to; n++) numbers.push(n);
+  const sheetCount = Math.max(1, Math.ceil(numbers.length / perSheet));
   const theme = currentTheme();
   const ring = theme.ring || '#FFFFFF';
 
-  const root=$('#printRoot'); root.innerHTML='';
-  const frag=document.createDocumentFragment();
-  let gi=0;
-  for(let s=0;s<sheetCount;s++){
-    const sheet=document.createElement('div');
-    sheet.className='sheet';
-    sheet.style.cssText+=`grid-template-columns:repeat(${cols},${cellW}mm);grid-auto-rows:${cellH}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
-    const tag=document.createElement('div');
-    tag.className='sheetTag'; tag.textContent=`Sheet ${s+1} / ${sheetCount}`;
+  const root = $('#printRoot'); root.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  let gi = 0;
+  for(let s = 0; s < sheetCount; s++){
+    const sheet = document.createElement('div');
+    sheet.className = 'sheet';
+    if(state.flow === 'column'){
+      sheet.style.cssText += `grid-auto-flow:column;grid-template-rows:repeat(${rows},${cellH}mm);grid-auto-columns:${cellW}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
+    } else {
+      sheet.style.cssText += `grid-auto-flow:row;grid-template-columns:repeat(${cols},${cellW}mm);grid-auto-rows:${cellH}mm;gap:${gap}mm;padding:${MARGIN}mm;`;
+    }
+    const tag = document.createElement('div');
+    tag.className = 'sheetTag'; tag.textContent = `Sheet ${s+1} / ${sheetCount}`;
     sheet.appendChild(tag);
-    const chunk=numbers.slice(s*perSheet,(s+1)*perSheet);
-    chunk.forEach((n,i)=>{
+    const chunk = numbers.slice(s * perSheet, (s + 1) * perSheet);
+    chunk.forEach((n, i) => {
       const color = state.alt ? theme.colors[gi % theme.colors.length] : theme.colors[0];
-      gi++;
-      const cell=document.createElement('div');
-      cell.className='stk pop';
-      cell.style.animationDelay = Math.min(i*12,420)+'ms';
-      cell.innerHTML = stickerSVG(n,color,ring,state.guides);
+      const cell = document.createElement('div');
+      cell.className = 'stk pop';
+      cell.style.animationDelay = Math.min(i * 12, 420) + 'ms';
+      cell.innerHTML = stickerSVG(n, color, ring, state.guides, gi);
       sheet.appendChild(cell);
+      gi++;
     });
     frag.appendChild(sheet);
   }
   root.appendChild(frag);
 
-  build={numbers,cols,rows,perSheet,gap,sheetCount,size,cellW,cellH};
+  build = {numbers, cols, rows, perSheet, gap, sheetCount, size, cellW, cellH};
 
-  $('#sizeVal').textContent=size+' mm';
-  const dim = state.shape==='rect' ? ` &nbsp;·&nbsp; label ≈ <b>${cellW} × ${cellH} mm</b>` : '';
-  $('#capText').innerHTML=`<b>${cols} × ${rows}</b> per sheet &nbsp;·&nbsp; <b>${perSheet}</b> fit on one A4${dim}`;
-  $('#stats').textContent=`${numbers.length} sticker${numbers.length!==1?'s':''} · ${perSheet}/sheet · ${sheetCount} A4 sheet${sheetCount!==1?'s':''}`;
-  $('#chip').textContent=`${numbers.length} stickers · ${sheetCount} sheet${sheetCount!==1?'s':''}`;
-  $('#pillShape').textContent=SHAPES[state.shape].label + (state.outline?' · outline':'') + (state.dot?' · 1. 2. 3.':'');
-  $('#pillSize').textContent=size+' mm';
+  $('#sizeVal').textContent = size + ' mm';
+  if($('#gapVal')) $('#gapVal').textContent = gap + ' mm';
+  if($('#gapInput') && document.activeElement !== $('#gapInput')) $('#gapInput').value = gap;
+  if(typeof updateGapPresets === 'function') updateGapPresets();
+
+  $('#fontScaleVal').textContent = state.fontScale + '%';
+  const dim = state.shape === 'rect'
+    ? ` &nbsp;·&nbsp; label ≈ <b>${cellW} × ${cellH} mm</b> (${state.orientation === 'vertical' ? 'vert' : 'horiz'})`
+    : ` &nbsp;·&nbsp; size ≈ <b>${cellW} × ${cellH} mm</b>`;
+  const flowDesc = state.flow === 'column' ? 'down cols ⬇️' : 'across rows ➡️';
+  $('#capText').innerHTML = `<b>${cols} × ${rows}</b> per sheet (${flowDesc}) &nbsp;·&nbsp; <b>${perSheet}</b> fit on one A4${dim}`;
+  $('#stats').textContent = `${numbers.length} sticker${numbers.length !== 1 ? 's' : ''} · ${perSheet}/sheet · ${sheetCount} A4 sheet${sheetCount !== 1 ? 's' : ''}`;
+  $('#chip').textContent = `${numbers.length} stickers · ${sheetCount} sheet${sheetCount !== 1 ? 's' : ''}`;
+  
+  const shapeLabel = SHAPES[state.shape].label + (state.shape === 'rect' ? (state.orientation === 'vertical' ? ' · vert' : ' · horiz') : '');
+  $('#pillShape').textContent = shapeLabel + (state.outline ? ' · outline' : '') + (state.dot ? ' · 1. 2. 3.' : '');
+  $('#pillSize').textContent = size + ' mm';
+  if($('#pillGap')) $('#pillGap').textContent = 'gap ' + gap + ' mm';
+  const varSuffix = state.fontVariation !== 'uniform' ? ` · ${state.fontVariation}` : '';
+  $('#pillFont').textContent = `${state.font} · ${state.fontScale}%${varSuffix}`;
+
+  const badge = $('#mTabBadge');
+  if(badge) badge.textContent = sheetCount;
+  updateMobileBar();
   layout();
 }
 
 function layout(){
   if(!build) return;
   const scroller=$('#scroll');
-  const avail=scroller.clientWidth-(window.innerWidth<640?20:40);
+  const pad = window.innerWidth < 640 ? 16 : 40;
+  const avail = Math.max(100, scroller.clientWidth - pad);
   const sheetW=PAGE_W*PXMM, sheetH=PAGE_H*PXMM;
-  const s=Math.max(.2, Math.min(1, avail/sheetW));
+  let s;
+  if(state.zoom === '100'){
+    s = 1;
+  } else {
+    s = Math.max(.2, Math.min(1, avail/sheetW));
+  }
   const root=$('#printRoot');
   root.style.transform=`scale(${s})`;
   $('#fitBox').style.width=(sheetW*s)+'px';
@@ -483,27 +846,32 @@ function setSize(v){
   if(v===state.size) return;
   state.size=v; $('#size').value=v; render();
 }
-function holdStep(btn, dir){
-  btn.addEventListener('click',()=>setSize(state.size+dir));
+function holdStep(btn, stepFn){
+  btn.addEventListener('click',()=>stepFn());
   btn.addEventListener('contextmenu',e=>e.preventDefault());
   let t1,t2;
   const stop=()=>{clearTimeout(t1); clearInterval(t2); t1=t2=null;};
   btn.addEventListener('pointerdown',()=>{
-    t1=setTimeout(()=>{ t2=setInterval(()=>setSize(state.size+dir),110); },380);
+    t1=setTimeout(()=>{ t2=setInterval(stepFn,110); },380);
   });
   ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,stop));
 }
-holdStep($('#minus'),-1);
-holdStep($('#plus'),1);
+holdStep($('#minus'),()=>setSize(state.size-1));
+holdStep($('#plus'),()=>setSize(state.size+1));
+holdStep($('#fsMinus'),()=>setFontScale(state.fontScale-5));
+holdStep($('#fsPlus'),()=>setFontScale(state.fontScale+5));
 
 /* ---------- control builders ---------- */
 function buildShapeTiles(){
   const box=$('#shapes'); box.innerHTML='';
   SHAPE_ORDER.forEach(sh=>{
-    const s=SHAPES[sh];
+    const s = (sh === 'rect' && state.orientation === 'vertical')
+      ? {label:'Rect', d:rectVertD, vb:'-5 -5 110 170'}
+      : (sh === 'rect' ? {label:'Rect', d:rectD, vb:'-5 -5 170 110'} : SHAPES[sh]);
+    const vb = s.vb || '-8 -8 116 116';
     const b=document.createElement('button');
     b.className='tile'+(sh===state.shape?' sel':'');
-    b.innerHTML=`<svg viewBox="${sh==='rect'?'-5 -5 170 110':'-8 -8 116 116'}"><path d="${s.d}" fill="#232738"/></svg><span>${s.label}</span>`;
+    b.innerHTML=`<svg viewBox="${vb}"><path d="${s.d}" fill="#232738"/></svg><span>${s.label}</span>`;
     b.onclick=()=>{state.shape=sh; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
     box.appendChild(b);
   });
@@ -544,7 +912,7 @@ function buildFonts(){
     const b=document.createElement('button');
     b.className='fontbtn'+(key===state.font?' sel':'');
     b.innerHTML=`<b style="font-family:'${f.family}';font-weight:${f.weight}">123</b><span>${key}</span>`;
-    b.onclick=()=>{state.font=key; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
+    b.onclick=()=>{state.font=key; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); updateFsPresetFont(); render();};
     box.appendChild(b);
   });
 }
@@ -560,7 +928,7 @@ async function downloadPNGs(){
   await document.fonts.ready;
   const W=1240,H=1754, k=W/PAGE_W;
   const theme=currentTheme(), ring=theme.ring||'#FFFFFF', F=FONTS[state.font];
-  const s=SHAPES[state.shape];
+  const s = getShapeSpec();
   const {cols,rows,gap,perSheet,cellW,cellH}=build;
   const totalW=cols*cellW+(cols-1)*gap, totalH=rows*cellH+(rows-1)*gap;
   const ox=(PAGE_W-totalW)/2, oy=(PAGE_H-totalH)/2;
@@ -571,9 +939,17 @@ async function downloadPNGs(){
     ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
     const chunk=build.numbers.slice(sh*perSheet,(sh+1)*perSheet);
     chunk.forEach((n,i)=>{
-      const col=i%cols, row=Math.floor(i/cols);
+      let col, row;
+      if(state.flow === 'column'){
+        row = i % rows;
+        col = Math.floor(i / rows);
+      } else {
+        col = i % cols;
+        row = Math.floor(i / cols);
+      }
       const x=ox+col*(cellW+gap), y=oy+row*(cellH+gap);
-      const color = state.alt ? theme.colors[(sh*perSheet+i)%theme.colors.length] : theme.colors[0];
+      const globalIdx = sh * perSheet + i;
+      const color = state.alt ? theme.colors[globalIdx % theme.colors.length] : theme.colors[0];
       ctx.save();
       ctx.translate(x*k,y*k);
       const sc=cellH*k/s.h; ctx.scale(sc,sc);
@@ -589,7 +965,7 @@ async function downloadPNGs(){
       ctx.strokeStyle = state.outline ? color : ring;
       ctx.lineWidth=6; ctx.stroke(p);
       ctx.fillStyle = state.outline ? '#232738' : inkFor(color);
-      ctx.font=`${F.weight} ${fontSize(n,s)}px '${F.family}'`;
+      ctx.font=`${F.weight} ${fontSize(n,s,globalIdx)}px '${F.family}'`;
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(labelFor(n),s.cx,s.cy+2);
       ctx.restore();
@@ -605,22 +981,275 @@ async function downloadPNGs(){
   toast('Done! Check your downloads 📥');
 }
 
+/* ---------- zoom controls ---------- */
+function setZoom(mode){
+  state.zoom = mode;
+  const fitBtn = $('#zoomFit');
+  const actualBtn = $('#zoom100');
+  if(fitBtn) fitBtn.classList.toggle('active', mode === 'fit');
+  if(actualBtn) actualBtn.classList.toggle('active', mode === '100');
+  layout();
+}
+
+/* ---------- mobile view switcher & action bar ---------- */
+function updateMobileBar(){
+  const toggleIcon = $('#mBarToggleIcon');
+  const toggleText = $('#mBarToggleText');
+  if(!toggleText) return;
+  const count = build?.numbers?.length ?? (state.to - state.from + 1);
+  if(state.mobileView === 'preview'){
+    toggleIcon.textContent = '⚙️';
+    toggleText.textContent = 'Edit Stickers';
+  } else {
+    toggleIcon.textContent = '📄';
+    toggleText.textContent = 'View Sheet (' + count + ')';
+  }
+}
+
+function setMobileView(view){
+  state.mobileView = view;
+  const layoutEl = $('main.layout');
+  if(layoutEl){
+    layoutEl.classList.remove('view-controls', 'view-preview');
+    layoutEl.classList.add(view === 'preview' ? 'view-preview' : 'view-controls');
+  }
+  const tabC = $('#tabControls');
+  const tabP = $('#tabPreview');
+  if(tabC) tabC.classList.toggle('active', view === 'controls');
+  if(tabP) tabP.classList.toggle('active', view === 'preview');
+  updateMobileBar();
+  if(view === 'preview'){
+    setTimeout(layout, 50);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } else {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
+function initMobileAndRangeControls(){
+  // Mobile tabs
+  $('#tabControls')?.addEventListener('click', () => setMobileView('controls'));
+  $('#tabPreview')?.addEventListener('click', () => setMobileView('preview'));
+
+  // Mobile sticky bottom bar
+  $('#mBarToggle')?.addEventListener('click', () => {
+    setMobileView(state.mobileView === 'controls' ? 'preview' : 'controls');
+  });
+  $('#mBarPrint')?.addEventListener('click', () => {
+    toast('Opening print dialog — pick “Save as PDF” 🖨');
+    setTimeout(() => window.print(), 350);
+  });
+
+  // Zoom buttons
+  $('#zoomFit')?.addEventListener('click', () => setZoom('fit'));
+  $('#zoom100')?.addEventListener('click', () => setZoom('100'));
+
+  // Range preset chips
+  document.querySelectorAll('.range-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const f = parseInt(chip.dataset.from, 10);
+      const t = parseInt(chip.dataset.to, 10);
+      state.from = f;
+      state.to = t;
+      $('#from').value = f;
+      $('#to').value = t;
+      const hint = $('#rangeHint');
+      if(hint) hint.textContent = '';
+      updateRangeChips();
+      render(true);
+      toast('Selected range ' + f + ' → ' + t + ' 🏷️');
+    });
+  });
+}
+
 /* ---------- events ---------- */
 let debounce;
 const schedule=()=>{clearTimeout(debounce); debounce=setTimeout(render,90);};
 
-$('#from').addEventListener('input',schedule);
-$('#to').addEventListener('input',schedule);
+$('#from').addEventListener('input', () => {
+  clearTimeout(debounce);
+  debounce = setTimeout(handleRangeInput, 90);
+});
+$('#to').addEventListener('input', () => {
+  clearTimeout(debounce);
+  debounce = setTimeout(handleRangeInput, 90);
+});
+$('#from').addEventListener('blur', () => commitRange(true));
+$('#to').addEventListener('blur', () => commitRange(true));
+$('#from').addEventListener('change', () => commitRange(true));
+$('#to').addEventListener('change', () => commitRange(true));
+['from','to'].forEach(id => {
+  $('#' + id).addEventListener('keydown', e => {
+    if(e.key === 'Enter'){
+      commitRange(true);
+      $('#' + id).blur();
+    }
+  });
+});
+
 $('#size').addEventListener('input',e=>{state.size=+e.target.value; schedule();});
 $('#alt').addEventListener('change',e=>{state.alt=e.target.checked; render();});
 $('#guides').addEventListener('change',e=>{state.guides=e.target.checked; render();});
 $('#outline').addEventListener('change',e=>{state.outline=e.target.checked; render();});
 $('#dot').addEventListener('change',e=>{state.dot=e.target.checked; render();});
-['from','to'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')render();}));
+
+/* ---------- font size variation controls ---------- */
+function updateFsPresetSelection(){
+  const box = $('#fsPresets');
+  if(!box) return;
+  [...box.children].forEach(btn=>{
+    const sc = parseInt(btn.dataset.scale, 10);
+    btn.classList.toggle('sel', sc === state.fontScale);
+  });
+}
+
+function updateFsPresetFont(){
+  const F = FONTS[state.font];
+  if(!F) return;
+  document.querySelectorAll('.fs-sample').forEach(el=>{
+    el.style.fontFamily = `'${F.family}', sans-serif`;
+    el.style.fontWeight = F.weight;
+  });
+}
+
+function setFontScale(v){
+  v = Math.max(FONT_SCALE_MIN, Math.min(FONT_SCALE_MAX, Math.round(v/5)*5));
+  if(v === state.fontScale) return;
+  state.fontScale = v;
+  $('#fontScale').value = v;
+  updateFsPresetSelection();
+  render();
+}
+
+function setFontVariation(mode){
+  state.fontVariation = mode;
+  const box = $('#varModes');
+  if(box){
+    [...box.children].forEach(btn=>{
+      btn.classList.toggle('sel', btn.dataset.mode === mode);
+    });
+  }
+  render();
+}
+
+function syncFontSizeControls(){
+  $('#fontScale').value = state.fontScale;
+  $('#fontScaleVal').textContent = state.fontScale + '%';
+  updateFsPresetSelection();
+  updateFsPresetFont();
+  const varBox = $('#varModes');
+  if(varBox){
+    [...varBox.children].forEach(btn=>{
+      btn.classList.toggle('sel', btn.dataset.mode === state.fontVariation);
+    });
+  }
+}
+
+function initFontSizeControls(){
+  const presetBox = $('#fsPresets');
+  if(presetBox){
+    [...presetBox.children].forEach(btn=>{
+      btn.onclick = () => setFontScale(parseInt(btn.dataset.scale, 10));
+    });
+  }
+  const varBox = $('#varModes');
+  if(varBox){
+    [...varBox.children].forEach(btn=>{
+      btn.onclick = () => setFontVariation(btn.dataset.mode);
+    });
+  }
+  $('#fontScale').addEventListener('input', e=>{
+    state.fontScale = +e.target.value;
+    updateFsPresetSelection();
+    schedule();
+  });
+}
+
+/* ---------- gap (spacing) controls ---------- */
+function updateGapPresets(){
+  const chips = document.querySelectorAll('#gapPresets .range-chip');
+  chips.forEach(chip => {
+    const g = parseFloat(chip.dataset.gap);
+    chip.classList.toggle('sel', Math.abs(g - state.gap) < 0.05);
+  });
+}
+
+function setGap(v){
+  v = Math.max(0, Math.min(16, Math.round(v * 2) / 2));
+  if(v === state.gap) return;
+  state.gap = v;
+  if($('#gapInput')) $('#gapInput').value = v;
+  if($('#gapVal')) $('#gapVal').textContent = v + ' mm';
+  updateGapPresets();
+  render();
+}
+
+function initGapControls(){
+  holdStep($('#gapMinus'), () => setGap(state.gap - 0.5));
+  holdStep($('#gapPlus'), () => setGap(state.gap + 0.5));
+
+  const gapIn = $('#gapInput');
+  if(gapIn){
+    gapIn.addEventListener('input', e => {
+      state.gap = +e.target.value;
+      if($('#gapVal')) $('#gapVal').textContent = state.gap + ' mm';
+      updateGapPresets();
+      schedule();
+    });
+  }
+
+  document.querySelectorAll('#gapPresets .range-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const g = parseFloat(chip.dataset.gap);
+      setGap(g);
+      toast('Sticker spacing set to ' + g + ' mm ↔');
+    });
+  });
+}
+
+/* ---------- direction & orientation controls ---------- */
+function setOrientation(orient){
+  if(state.orientation === orient) return;
+  state.orientation = orient;
+  syncDirectionControls();
+  buildShapeTiles();
+  render();
+  toast(orient === 'vertical' ? 'Vertical orientation ↕' : 'Horizontal orientation ↔');
+}
+
+function setFlow(flow){
+  if(state.flow === flow) return;
+  state.flow = flow;
+  syncDirectionControls();
+  render();
+  toast(flow === 'column' ? 'Filling down columns ⬇️' : 'Filling across rows ➡️');
+}
+
+function syncDirectionControls(){
+  document.querySelectorAll('#orientGroup .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.orient === state.orientation);
+  });
+  document.querySelectorAll('#flowGroup .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.flow === state.flow);
+  });
+}
+
+function initDirectionControls(){
+  document.querySelectorAll('#orientGroup .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setOrientation(btn.dataset.orient));
+  });
+  document.querySelectorAll('#flowGroup .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setFlow(btn.dataset.flow));
+  });
+}
 
 $('#ampoulePreset').onclick=()=>{
-  Object.assign(state,{shape:'rect', size:30, outline:true, guides:true, alt:true, theme:'black', font:'Fredoka', dot:true});
-  $('#size').value=30; syncToggles();
+  Object.assign(state,{from:1, to:30, shape:'rect', size:30, gap:3, orientation:'horizontal', flow:'row',
+                       outline:true, guides:true, alt:true, theme:'black', font:'Fredoka', fontScale:100, fontVariation:'uniform', dot:true});
+  $('#from').value=1; $('#to').value=30; $('#size').value=30;
+  if($('#gapInput')) $('#gapInput').value = 3;
+  if($('#gapVal')) $('#gapVal').textContent = '3 mm';
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); updateGapPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
   toast('Ampoule preset applied 🧪 30 × 18.75 mm · 1. 2. 3.');
 };
@@ -630,7 +1259,10 @@ $('#pngBtn').onclick=downloadPNGs;
 $('#resetBtn').onclick=()=>{
   Object.assign(state, DEFAULTS);
   $('#from').value=DEFAULTS.from; $('#to').value=DEFAULTS.to; $('#size').value=DEFAULTS.size;
-  syncToggles();
+  if($('#gapInput')) $('#gapInput').value = DEFAULTS.gap;
+  if($('#gapVal')) $('#gapVal').textContent = DEFAULTS.gap + ' mm';
+  setZoom('fit'); setMobileView('controls');
+  syncToggles(); syncFontSizeControls(); syncDirectionControls(); updateGapPresets();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
   toast('Back to defaults ✨ border-only black labels');
 };
@@ -642,7 +1274,21 @@ document.getElementById('starDeco').setAttribute('stroke-width','6');
 document.getElementById('starDeco').setAttribute('stroke-linejoin','round');
 document.getElementById('logoStar').setAttribute('d',starD(50,31));
 
-buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); render();
+initFontSizeControls();
+initMobileAndRangeControls();
+initGapControls();
+initDirectionControls();
+buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); render();
 </script>
+<div class="mobile-bar" id="mobileBar">
+  <button type="button" class="m-bar-btn" id="mBarToggle">
+    <span id="mBarToggleIcon">📄</span>
+    <span id="mBarToggleText">View Preview</span>
+  </button>
+  <button type="button" class="m-bar-btn primary" id="mBarPrint">
+    🖨️ Save A4
+  </button>
+</div>
+
 </body>
 </html>
