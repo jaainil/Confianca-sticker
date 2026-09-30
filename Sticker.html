@@ -77,6 +77,18 @@
   .preset:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
   .presetNote{font-size:11px; font-weight:800; color:#8A91A5; line-height:1.3}
 
+  .presetSection{padding-bottom:14px; border-bottom:2.5px dashed #DCE2EE; margin-bottom:4px}
+  .presetGrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px}
+  .preset-btn{background:#fff; border:2.5px solid var(--ink); border-radius:14px; padding:9px 10px;
+    display:flex; align-items:center; gap:9px; cursor:pointer; box-shadow:3px 3px 0 var(--ink);
+    text-align:left; transition:transform .14s, box-shadow .14s, background .14s}
+  .preset-btn:hover{transform:translate(-1px,-2px); box-shadow:5px 5px 0 var(--ink); background:#FFF8E5}
+  .preset-btn:active{transform:translate(2px,2px); box-shadow:0 0 0 var(--ink)}
+  .preset-btn .preset-icon{font-size:20px; line-height:1; flex-shrink:0}
+  .preset-btn .preset-info{display:flex; flex-direction:column; min-width:0}
+  .preset-btn .preset-title{font:900 12.5px 'Nunito',sans-serif; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .preset-btn .preset-sub{font:800 10.5px 'Nunito',sans-serif; color:#78829D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
   .numrow{display:grid; grid-template-columns:1fr 26px 1fr; gap:8px; align-items:end}
   .field label{display:block; font-size:12px; font-weight:900; margin-bottom:5px; color:#454B5E}
   .field input{width:100%; font:800 22px 'Nunito'; padding:9px 12px; border:2.5px solid var(--ink);
@@ -358,9 +370,38 @@
 
     <aside class="panel controls">
 
-      <div class="presetRow">
-        <button class="preset" id="ampoulePreset">🧪 Ampoule labels</button>
-        <span class="presetNote">rect · 14 mm · 0 mm gap · down cols</span>
+      <div class="presetSection">
+        <div class="lbl" style="margin-bottom:8px">Quick container presets</div>
+        <div class="presetGrid">
+          <button type="button" class="preset-btn" id="preset1mlAmpoule" title="1 ml Ampoule: 6 mm · 0 gap · Bungee 180% · 6px solid · outline · dot">
+            <span class="preset-icon">🧪</span>
+            <div class="preset-info">
+              <span class="preset-title">1 ml Ampoule</span>
+              <span class="preset-sub">6 mm · 0 gap · Bungee</span>
+            </div>
+          </button>
+          <button type="button" class="preset-btn" id="preset1mlVial" title="1 ml Vial: 6 mm · 0 gap · Bungee 180% · 6px solid · outline · dot">
+            <span class="preset-icon">🫙</span>
+            <div class="preset-info">
+              <span class="preset-title">1 ml Vial</span>
+              <span class="preset-sub">6 mm · 0 gap · Bungee</span>
+            </div>
+          </button>
+          <button type="button" class="preset-btn" id="preset10mlAmpoule" title="10 ml Ampoule: 10 mm · 0 gap · Bungee 180% · 6px solid · outline · dot">
+            <span class="preset-icon">🧪</span>
+            <div class="preset-info">
+              <span class="preset-title">10 ml Ampoule</span>
+              <span class="preset-sub">10 mm · 0 gap · Bungee</span>
+            </div>
+          </button>
+          <button type="button" class="preset-btn" id="preset10mlVial" title="10 ml Vial: 10 mm · 0 gap · Bungee 180% · 6px solid · outline · dot">
+            <span class="preset-icon">🫙</span>
+            <div class="preset-info">
+              <span class="preset-title">10 ml Vial</span>
+              <span class="preset-sub">10 mm · 0 gap · Bungee</span>
+            </div>
+          </button>
+        </div>
       </div>
 
       <section>
@@ -391,6 +432,23 @@
           <button type="button" class="range-chip" data-mult="2">2× (Duplicate col)</button>
           <button type="button" class="range-chip" data-mult="3">3× (Triplicate)</button>
           <button type="button" class="range-chip" data-mult="4">4× (Quad)</button>
+        </div>
+        <div style="margin-top:12px; padding-top:10px; border-top:1.5px dashed #DCE2EE">
+          <label class="switch">
+            <input type="checkbox" id="fillColumn" checked>
+            <span class="track"><span class="knob"></span></span>
+            Complete full sheet (fill remaining stickers)
+          </label>
+          <div id="fillModeWrap" class="dir-row" style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+            <button type="button" class="dir-btn sel" id="fillModeContinue" data-fillmode="continue" title="Continue counting upward (e.g. 166, 167…)">
+              <span class="dir-icon">➡️</span>
+              <span class="dir-label">Continue next (166, 167…)</span>
+            </button>
+            <button type="button" class="dir-btn" id="fillModeRestart" data-fillmode="restart" title="Restart counting from 1 (1, 2…)">
+              <span class="dir-icon">🔄</span>
+              <span class="dir-label">Restart from 1 (1, 2…)</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -432,8 +490,19 @@
       </section>
 
       <section>
-        <div class="lbl">Shape</div>
+        <div class="lbl">Shape & Corners</div>
         <div class="tiles" id="shapes"></div>
+        <div class="sublbl">Corners (Corner radius)</div>
+        <div class="dir-row" id="radiusGroup">
+          <button type="button" class="dir-btn" data-radius="square" title="Sharp 90° square corners">
+            <span class="dir-icon">⬛</span>
+            <span class="dir-label">Square (Sharp)</span>
+          </button>
+          <button type="button" class="dir-btn sel" data-radius="rounded" title="Curved rounded corners">
+            <span class="dir-icon">▢</span>
+            <span class="dir-label">Rounded (Curved)</span>
+          </button>
+        </div>
       </section>
 
       <section>
@@ -452,11 +521,11 @@
 
         <div class="sublbl">Numbering sequence flow</div>
         <div class="dir-row" id="flowGroup">
-          <button type="button" class="dir-btn" data-flow="row" title="Fill left to right across rows">
+          <button type="button" class="dir-btn sel" data-flow="row" title="Fill left to right across rows">
             <span class="dir-icon">➡️</span>
             <span class="dir-label">Across (Rows)</span>
           </button>
-          <button type="button" class="dir-btn sel" data-flow="column" title="Fill top to bottom down columns">
+          <button type="button" class="dir-btn" data-flow="column" title="Fill top to bottom down columns">
             <span class="dir-icon">⬇️</span>
             <span class="dir-label">Down (Columns)</span>
           </button>
@@ -476,6 +545,43 @@
       </section>
 
       <section>
+        <div class="lbl">Border line & style</div>
+        <div class="sublbl" style="margin-top:0">Line thickness</div>
+        <div class="sliderrow">
+          <button type="button" class="stepBtn" id="bwMinus" title="-1 px">−</button>
+          <input type="range" id="bwInput" min="0" max="14" step="1" value="6">
+          <button type="button" class="stepBtn" id="bwPlus" title="+1 px">+</button>
+          <div class="sizeval" id="bwVal">6 px</div>
+        </div>
+        <div class="range-presets" id="bwPresets" style="margin-bottom:12px">
+          <button type="button" class="range-chip" data-bw="0">None (0px)</button>
+          <button type="button" class="range-chip" data-bw="2">Thin (2px)</button>
+          <button type="button" class="range-chip sel" data-bw="6">Normal (6px)</button>
+          <button type="button" class="range-chip" data-bw="10">Thick (10px)</button>
+        </div>
+
+        <div class="sublbl">Line style</div>
+        <div class="dir-row" id="bStyleGroup">
+          <button type="button" class="dir-btn sel" data-style="solid" title="Solid continuous border line">
+            <span class="dir-icon">━</span>
+            <span class="dir-label">Solid</span>
+          </button>
+          <button type="button" class="dir-btn" data-style="dashed" title="Dashed border line">
+            <span class="dir-icon">╍</span>
+            <span class="dir-label">Dashed</span>
+          </button>
+          <button type="button" class="dir-btn" data-style="dotted" title="Dotted border line">
+            <span class="dir-icon">⋯</span>
+            <span class="dir-label">Dotted</span>
+          </button>
+          <button type="button" class="dir-btn" data-style="none" title="No border line (borderless)">
+            <span class="dir-icon">∅</span>
+            <span class="dir-label">None</span>
+          </button>
+        </div>
+      </section>
+
+      <section>
         <div class="lbl">Colors · tap ＋ to pick your own</div>
         <div class="swrow" id="themes"></div>
       </section>
@@ -487,22 +593,26 @@
 
       <section>
         <div class="lbl">Font size variations</div>
-        <div class="fs-presets" id="fsPresets">
+        <div class="fs-presets" id="fsPresets" style="grid-template-columns:repeat(5,1fr)">
           <button type="button" class="fs-btn" data-scale="75" title="Compact size (75%)">
-            <span class="fs-sample" style="font-size:13px">12</span>
+            <span class="fs-sample" style="font-size:12px">12</span>
             <span class="fs-label">Small</span>
           </button>
           <button type="button" class="fs-btn sel" data-scale="100" title="Regular size (100%)">
-            <span class="fs-sample" style="font-size:17px">12</span>
+            <span class="fs-sample" style="font-size:15px">12</span>
             <span class="fs-label">Regular</span>
           </button>
           <button type="button" class="fs-btn" data-scale="125" title="Large size (125%)">
-            <span class="fs-sample" style="font-size:21px">12</span>
+            <span class="fs-sample" style="font-size:18px">12</span>
             <span class="fs-label">Large</span>
           </button>
           <button type="button" class="fs-btn" data-scale="150" title="Jumbo size (150%)">
-            <span class="fs-sample" style="font-size:25px">12</span>
+            <span class="fs-sample" style="font-size:21px">12</span>
             <span class="fs-label">Jumbo</span>
+          </button>
+          <button type="button" class="fs-btn" data-scale="180" title="Max size (180%)">
+            <span class="fs-sample" style="font-size:24px">12</span>
+            <span class="fs-label">180% Max</span>
           </button>
         </div>
         <div class="sliderrow">
@@ -535,9 +645,9 @@
       <section>
         <div class="lbl">Extras</div>
         <div class="toggles">
-          <label class="switch"><input type="checkbox" id="dot"><span class="track"><span class="knob"></span></span> Dot after number (1. 2. 3.)</label>
+          <label class="switch"><input type="checkbox" id="dot" checked><span class="track"><span class="knob"></span></span> Dot after number (1. 2. 3.)</label>
           <label class="switch"><input type="checkbox" id="outline" checked><span class="track"><span class="knob"></span></span> Border only (no fill)</label>
-          <label class="switch"><input type="checkbox" id="alt" checked><span class="track"><span class="knob"></span></span> Alternate colors</label>
+          <label class="switch"><input type="checkbox" id="alt"><span class="track"><span class="knob"></span></span> Alternate colors</label>
           <label class="switch"><input type="checkbox" id="guides" checked><span class="track"><span class="knob"></span></span> Cut guides</label>
         </div>
       </section>
@@ -564,6 +674,7 @@
             <button type="button" class="zoom-btn" id="zoom100" title="100% actual print size">100%</button>
           </div>
           <span class="pill" id="pillShape"></span>
+          <span class="pill" id="pillBorder"></span>
           <span class="pill" id="pillSize"></span>
           <span class="pill" id="pillGap"></span>
           <span class="pill" id="pillAlign"></span>
@@ -628,20 +739,127 @@ const SHAPES = {
 const SHAPE_ORDER = ['rect','circle','square','hex','star'];
 
 function getShapeSpec(){
-  if(state.shape === 'rect' && state.orientation === 'vertical'){
-    return {label:'Rect (Vert)', d:rectVertD, cx:50, cy:80, w:100, h:160, vb:'-12 -12 124 184', ratio:1.6, fsf:0.88};
+  const isSquare = state.radius === 'square';
+  if(state.shape === 'rect'){
+    if(state.orientation === 'vertical'){
+      const d = isSquare ? 'M3,3 h94 v154 h-94 Z' : rectVertD;
+      return {label:'Rect (Vert)', d, cx:50, cy:80, w:100, h:160, vb:'-12 -12 124 184', ratio:1.6, fsf:0.88};
+    }
+    const d = isSquare ? 'M3,3 h154 v94 h-154 Z' : rectD;
+    return {label:'Rect', d, cx:80, cy:50, w:160, h:100, vb:'-12 -12 184 124', ratio:0.625, fsf:1};
+  }
+  if(state.shape === 'square'){
+    const d = isSquare ? 'M4,4 h92 v92 h-92 Z' : roundedD;
+    return {label:'Square', d, cx:50, cy:50, w:100, h:100, vb:'-10 -10 120 120', ratio:1, fsf:1};
   }
   return SHAPES[state.shape] || SHAPES.rect;
 }
 
 /* DEFAULTS: border-only + black, ampoule-friendly */
-const DEFAULTS = {from:1, to:30, size:14, gap:0, orientation:'horizontal', flow:'column',
-                  align:'left', multiply:1,
-                  shape:'rect', theme:'black', font:'Fredoka',
-                  fontScale:100, fontVariation:'uniform', zoom:'fit', mobileView:'controls',
-                  alt:true, guides:true, outline:true, dot:false};
+const DEFAULTS = {from:1, to:30, size:14, gap:0, orientation:'horizontal', flow:'row',
+                  align:'left', multiply:1, fillColumn:true, fillMode:'continue',
+                  shape:'rect', radius:'rounded', borderWidth:6, borderStyle:'solid',
+                  theme:'black', font:'Bungee',
+                  fontScale:180, fontVariation:'uniform', zoom:'fit', mobileView:'controls',
+                  alt:false, guides:true, outline:true, dot:true};
 const state = Object.assign({}, DEFAULTS, {customColor:'#1D6FE0'});
 let build = null;
+
+/* ---------- localStorage state persistence ---------- */
+const STORAGE_KEY = 'confianca_sticker_maker_state_v1';
+
+function saveState(){
+  try {
+    const toSave = {
+      from: state.from,
+      to: state.to,
+      size: state.size,
+      gap: state.gap,
+      orientation: state.orientation,
+      flow: state.flow,
+      align: state.align,
+      multiply: state.multiply,
+      fillColumn: state.fillColumn ?? true,
+      fillMode: state.fillMode || 'continue',
+      shape: state.shape,
+      radius: state.radius,
+      borderWidth: state.borderWidth,
+      borderStyle: state.borderStyle,
+      theme: state.theme,
+      customColor: state.customColor,
+      font: state.font,
+      fontScale: state.fontScale,
+      fontVariation: state.fontVariation,
+      alt: state.alt,
+      guides: state.guides,
+      outline: state.outline,
+      dot: state.dot
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  } catch(e) {}
+}
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    if(typeof data !== 'object' || !data) return false;
+
+    if(typeof data.from === 'number' && !isNaN(data.from)) state.from = Math.max(0, Math.min(999, data.from));
+    if(typeof data.to === 'number' && !isNaN(data.to)) state.to = Math.max(0, Math.min(999, data.to));
+    if(typeof data.size === 'number' && !isNaN(data.size)) state.size = Math.max(SIZE_MIN, Math.min(SIZE_MAX, data.size));
+    if(typeof data.gap === 'number' && !isNaN(data.gap)) state.gap = Math.max(0, Math.min(16, data.gap));
+    if(typeof data.multiply === 'number' && !isNaN(data.multiply)) state.multiply = Math.max(1, Math.min(10, data.multiply));
+    if(typeof data.fillColumn === 'boolean') state.fillColumn = data.fillColumn;
+    if(['continue','restart'].includes(data.fillMode)) state.fillMode = data.fillMode;
+    if(['horizontal','vertical'].includes(data.orientation)) state.orientation = data.orientation;
+    if(['row','column'].includes(data.flow)) state.flow = data.flow;
+    if(['left','center'].includes(data.align)) state.align = data.align;
+    if(SHAPES[data.shape]) state.shape = data.shape;
+    if(['square','rounded'].includes(data.radius)) state.radius = data.radius;
+    if(typeof data.borderWidth === 'number' && !isNaN(data.borderWidth)) state.borderWidth = Math.max(0, Math.min(14, data.borderWidth));
+    if(['solid','dashed','dotted','none'].includes(data.borderStyle)) state.borderStyle = data.borderStyle;
+    if(THEMES[data.theme] || data.theme === 'custom') state.theme = data.theme;
+    if(typeof data.customColor === 'string') state.customColor = data.customColor;
+    if(FONTS[data.font]) state.font = data.font;
+    if(typeof data.fontScale === 'number' && !isNaN(data.fontScale)) state.fontScale = Math.max(FONT_SCALE_MIN, Math.min(FONT_SCALE_MAX, data.fontScale));
+    if(['uniform','autofit','alt','mixed'].includes(data.fontVariation)) state.fontVariation = data.fontVariation;
+    if(typeof data.alt === 'boolean') state.alt = data.alt;
+    if(typeof data.guides === 'boolean') state.guides = data.guides;
+    if(typeof data.outline === 'boolean') state.outline = data.outline;
+    if(typeof data.dot === 'boolean') state.dot = data.dot;
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function syncAllInputs(){
+  if($('#from')) $('#from').value = state.from;
+  if($('#to')) $('#to').value = state.to;
+  if($('#size')) $('#size').value = state.size;
+  if($('#sizeVal')) $('#sizeVal').textContent = state.size + ' mm';
+  if($('#gapInput')) $('#gapInput').value = state.gap;
+  if($('#gapVal')) $('#gapVal').textContent = state.gap + ' mm';
+  if($('#multInput')) $('#multInput').value = state.multiply;
+  if($('#multVal')) $('#multVal').textContent = `${state.multiply}× (${state.multiply === 1 ? 'Single' : state.multiply + ' columns'})`;
+  if($('#fillColumn')) $('#fillColumn').checked = state.fillColumn ?? true;
+  syncFillModeControls();
+  if($('#bwInput')) $('#bwInput').value = state.borderWidth ?? 6;
+  if($('#bwVal')) $('#bwVal').textContent = (state.borderWidth ?? 6) + ' px';
+  syncToggles();
+  syncFontSizeControls();
+  syncDirectionControls();
+  syncAlignmentControls();
+  syncRadiusControls();
+  syncBorderStyleControls();
+  updateSizePresets();
+  updateGapPresets();
+  updateMultPresets();
+  updateBwPresets();
+  updateRangeChips();
+}
 
 function currentTheme(){
   if(state.theme==='custom') return {name:'Custom', colors:[state.customColor]};
@@ -659,7 +877,7 @@ function toast(msg){
 }
 
 function updateRangeChips(){
-  const chips = document.querySelectorAll('.range-chip');
+  const chips = document.querySelectorAll('#rangePresets .range-chip');
   chips.forEach(chip => {
     const cf = parseInt(chip.dataset.from, 10);
     const ct = parseInt(chip.dataset.to, 10);
@@ -746,9 +964,11 @@ function cellDims(){
   }
   return {cellW: state.size, cellH: +(state.size * s.ratio).toFixed(2)};
 }
+let currentMaxNumber = 30;
 function labelFor(n){ return state.dot ? n + '.' : String(n); }
 function fontSize(n, spec, index=0){
-  const maxDigits = Math.max(String(state.from || 1).length, String(state.to || 30).length);
+  const maxVal = Math.max(state.to || 30, currentMaxNumber || state.to || 30);
+  const maxDigits = Math.max(String(state.from || 1).length, String(maxVal).length);
   let base;
   if(state.fontVariation === 'autofit'){
     const digits = String(n).length;
@@ -780,9 +1000,20 @@ function stickerSVG(n, themeColor, ring, guides, index=0){
   const guide = guides
     ? `<g transform="translate(${s.cx} ${s.cy}) scale(1.13) translate(-${s.cx} -${s.cy})">
          <path d="${s.d}" fill="none" stroke="#BCC3D2" stroke-width="1.4" stroke-dasharray="5 5"/></g>` : '';
+
+  const bw = state.borderStyle === 'none' ? 0 : (typeof state.borderWidth === 'number' ? state.borderWidth : 6);
+  const lineJoin = state.radius === 'square' ? 'miter' : 'round';
+  let dashAttr = '';
+  if(state.borderStyle === 'dashed'){
+    dashAttr = ' stroke-dasharray="10 8" stroke-linecap="round"';
+  } else if(state.borderStyle === 'dotted'){
+    dashAttr = ' stroke-dasharray="3 7" stroke-linecap="round"';
+  }
+  const strokeAttr = bw > 0 ? `stroke="${stroke}" stroke-width="${bw}" stroke-linejoin="${lineJoin}"${dashAttr}` : 'stroke="none"';
+
   return `<svg viewBox="${s.vb}" aria-hidden="true">
     ${guide}
-    <path d="${s.d}" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/>
+    <path d="${s.d}" fill="${fill}" ${strokeAttr}/>
     <text x="${s.cx}" y="${s.cy+1}" text-anchor="middle" dominant-baseline="central"
       font-family="'${F.family}',sans-serif" font-weight="${F.weight}" font-size="${fs}" fill="${ink}">${labelFor(n)}</text>
   </svg>`;
@@ -802,6 +1033,8 @@ function render(keepInputs = false){
   const multiply = Math.max(1, Math.min(20, parseInt(state.multiply, 10) || 1));
   const align = state.align || 'left';
   const flow = state.flow || 'row';
+  const shouldFill = state.fillColumn ?? true;
+  const fillMode = state.fillMode || 'continue';
 
   const maxCols = Math.max(1, Math.floor((PAGE_W - 2 * MARGIN + gap) / (cellW + gap)));
   const maxRows = Math.max(1, Math.floor((PAGE_H - 2 * MARGIN + gap) / (cellH + gap)));
@@ -818,10 +1051,32 @@ function render(keepInputs = false){
       slices.push(baseNumbers.slice(i, i + maxRows));
     }
 
+    const filledSlices = slices.map(sl => {
+      if(!shouldFill || sl.length >= maxRows) return sl;
+      const filled = [...sl];
+      if(fillMode === 'continue'){
+        let nextNum = (sl[sl.length - 1] || state.to) + 1;
+        while(filled.length < maxRows){
+          filled.push(nextNum++);
+        }
+      } else {
+        let cycle = 1;
+        const count = Math.max(1, state.to - state.from + 1);
+        while(filled.length < maxRows){
+          filled.push(cycle);
+          cycle++;
+          if(cycle > count) cycle = 1;
+        }
+      }
+      return filled;
+    });
+
+    currentMaxNumber = Math.max(state.to, ...(filledSlices.length ? filledSlices.flat() : [state.to]));
+
     let currentSheet = { cols: 0, rows: 0, cells: [] };
     let globalIdx = 0;
 
-    for(const sl of slices){
+    for(const sl of filledSlices){
       for(let m = 0; m < multiply; m++){
         if(currentSheet.cols >= maxCols){
           sheetsData.push(currentSheet);
@@ -837,13 +1092,32 @@ function render(keepInputs = false){
     }
     if(currentSheet.cells.length > 0) sheetsData.push(currentSheet);
   } else {
-    // Row flow: duplicate numbers consecutively
+    // Row flow: duplicate numbers consecutively across rows
     const multiplied = [];
     baseNumbers.forEach(num => {
       for(let m = 0; m < multiply; m++) multiplied.push(num);
     });
 
     const perSheet = maxCols * maxRows;
+
+    if(shouldFill && perSheet > 0){
+      const rem = multiplied.length % perSheet;
+      const needed = rem > 0 ? (perSheet - rem) : 0;
+      if(needed > 0){
+        let nextNum = fillMode === 'continue' ? (state.to + 1) : 1;
+        const count = Math.max(1, state.to - state.from + 1);
+        while(multiplied.length % perSheet !== 0){
+          for(let m = 0; m < multiply && (multiplied.length % perSheet !== 0); m++){
+            multiplied.push(nextNum);
+          }
+          nextNum++;
+          if(fillMode === 'restart' && nextNum > count) nextNum = 1;
+        }
+      }
+    }
+
+    currentMaxNumber = Math.max(state.to, ...(multiplied.length ? multiplied : [state.to]));
+
     const sheetCount = Math.max(1, Math.ceil(multiplied.length / perSheet));
     let globalIdx = 0;
 
@@ -862,7 +1136,7 @@ function render(keepInputs = false){
   }
 
   const sheetCount = sheetsData.length;
-  const totalStickersCount = baseNumbers.length * multiply;
+  const totalStickersCount = sheetsData.reduce((acc, sh) => acc + sh.cells.length, 0);
   const theme = currentTheme();
   const ring = theme.ring || '#FFFFFF';
 
@@ -924,6 +1198,12 @@ function render(keepInputs = false){
   if($('#multInput') && document.activeElement !== $('#multInput')) $('#multInput').value = multiply;
   if(typeof updateMultPresets === 'function') updateMultPresets();
 
+  if($('#bwVal')) $('#bwVal').textContent = (state.borderWidth ?? 6) + ' px';
+  if($('#bwInput') && document.activeElement !== $('#bwInput')) $('#bwInput').value = state.borderWidth ?? 6;
+  if(typeof updateBwPresets === 'function') updateBwPresets();
+  if(typeof syncRadiusControls === 'function') syncRadiusControls();
+  if(typeof syncBorderStyleControls === 'function') syncBorderStyleControls();
+
   $('#fontScaleVal').textContent = state.fontScale + '%';
   const dim = state.shape === 'rect'
     ? ` &nbsp;·&nbsp; label ≈ <b>${cellW} × ${cellH} mm</b> (${state.orientation === 'vertical' ? 'vert' : 'horiz'})`
@@ -931,21 +1211,28 @@ function render(keepInputs = false){
   const flowDesc = flow === 'column' ? `down cols (${multiply}× col${multiply !== 1 ? 's' : ''})` : `across rows (${multiply}×)`;
   const alignDesc = align === 'left' ? 'left-aligned ⇤' : 'centered ⇥⇤';
   $('#capText').innerHTML = `<b>${alignDesc}</b> &nbsp;·&nbsp; <b>${flowDesc}</b> &nbsp;·&nbsp; <b>${maxCols} × ${maxRows}</b> max/sheet${dim}`;
-  $('#stats').textContent = `${totalStickersCount} sticker${totalStickersCount !== 1 ? 's' : ''} (${baseNumbers.length} × ${multiply}) · ${sheetCount} A4 sheet${sheetCount !== 1 ? 's' : ''}`;
+  const multInfo = multiply > 1 ? ` (${multiply}× cop${multiply !== 1 ? 'ies' : 'y'})` : '';
+  const fillInfo = (shouldFill && totalStickersCount > baseNumbers.length * multiply)
+    ? (fillMode === 'continue' ? ` · continued to ${currentMaxNumber}` : ' · filled from 1')
+    : '';
+  $('#stats').textContent = `${totalStickersCount} sticker${totalStickersCount !== 1 ? 's' : ''}${multInfo}${fillInfo} · ${sheetCount} A4 sheet${sheetCount !== 1 ? 's' : ''}`;
   $('#chip').textContent = `${totalStickersCount} stickers · ${sheetCount} sheet${sheetCount !== 1 ? 's' : ''}`;
 
   const shapeLabel = SHAPES[state.shape].label + (state.shape === 'rect' ? (state.orientation === 'vertical' ? ' · vert' : ' · horiz') : '');
-  $('#pillShape').textContent = shapeLabel + (state.outline ? ' · outline' : '') + (state.dot ? ' · 1. 2. 3.' : '');
+  const cornerSuffix = ['rect','square'].includes(state.shape) ? ` · ${state.radius || 'rounded'}` : '';
+  $('#pillShape').textContent = shapeLabel + cornerSuffix + (state.outline ? ' · outline' : '') + (state.dot ? ' · 1. 2. 3.' : '');
+  if($('#pillBorder')) $('#pillBorder').textContent = state.borderStyle === 'none' ? 'borderless' : `${state.borderWidth ?? 6}px ${state.borderStyle || 'solid'}`;
   $('#pillSize').textContent = size + ' mm';
   if($('#pillGap')) $('#pillGap').textContent = 'gap ' + gap + ' mm';
   if($('#pillAlign')) $('#pillAlign').textContent = align === 'left' ? 'left ⇤' : 'center ⇥';
-  if($('#pillMult')) $('#pillMult').textContent = `${multiply}× col`;
+  if($('#pillMult')) $('#pillMult').textContent = `${multiply}×`;
   const varSuffix = state.fontVariation !== 'uniform' ? ` · ${state.fontVariation}` : '';
   $('#pillFont').textContent = `${state.font} · ${state.fontScale}%${varSuffix}`;
 
   const badge = $('#mTabBadge');
   if(badge) badge.textContent = sheetCount;
   updateMobileBar();
+  saveState();
   layout();
 }
 
@@ -980,6 +1267,7 @@ function updateSizePresets(){
 }
 
 function setSize(v){
+  if(isNaN(v)) return;
   v = Math.max(SIZE_MIN, Math.min(SIZE_MAX, Math.round(v)));
   if(v === state.size) return;
   state.size = v;
@@ -993,6 +1281,7 @@ function initSizeControls(){
   document.querySelectorAll('#sizePresets .range-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const sz = parseInt(chip.dataset.size, 10);
+      if(isNaN(sz)) return;
       setSize(sz);
       toast(`Sticker size set to ${sz} mm 📏`);
     });
@@ -1016,14 +1305,28 @@ holdStep($('#fsPlus'),()=>setFontScale(state.fontScale+5));
 /* ---------- control builders ---------- */
 function buildShapeTiles(){
   const box=$('#shapes'); box.innerHTML='';
+  const isSquare = state.radius === 'square';
   SHAPE_ORDER.forEach(sh=>{
-    const s = (sh === 'rect' && state.orientation === 'vertical')
-      ? {label:'Rect', d:rectVertD, vb:'-5 -5 110 170'}
-      : (sh === 'rect' ? {label:'Rect', d:rectD, vb:'-5 -5 170 110'} : SHAPES[sh]);
-    const vb = s.vb || '-8 -8 116 116';
+    let d, vb;
+    if(sh === 'rect'){
+      if(state.orientation === 'vertical'){
+        d = isSquare ? 'M3,3 h94 v154 h-94 Z' : rectVertD;
+        vb = '-5 -5 110 170';
+      } else {
+        d = isSquare ? 'M3,3 h154 v94 h-154 Z' : rectD;
+        vb = '-5 -5 170 110';
+      }
+    } else if(sh === 'square'){
+      d = isSquare ? 'M4,4 h92 v92 h-92 Z' : roundedD;
+      vb = '-8 -8 116 116';
+    } else {
+      d = SHAPES[sh].d;
+      vb = SHAPES[sh].vb || '-8 -8 116 116';
+    }
+    const label = SHAPES[sh].label;
     const b=document.createElement('button');
     b.className='tile'+(sh===state.shape?' sel':'');
-    b.innerHTML=`<svg viewBox="${vb}"><path d="${s.d}" fill="#232738"/></svg><span>${s.label}</span>`;
+    b.innerHTML=`<svg viewBox="${vb}"><path d="${d}" fill="#232738"/></svg><span>${label}</span>`;
     b.onclick=()=>{state.shape=sh; [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); render();};
     box.appendChild(b);
   });
@@ -1119,9 +1422,23 @@ async function downloadPNGs(singleSheetIdx = null){
       const p = new Path2D(s.d);
       ctx.fillStyle = state.outline ? '#FFFFFF' : color;
       ctx.fill(p);
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = state.outline ? color : ring;
-      ctx.lineWidth = 6; ctx.stroke(p);
+      const bw = state.borderStyle === 'none' ? 0 : (typeof state.borderWidth === 'number' ? state.borderWidth : 6);
+      if(bw > 0 && state.borderStyle !== 'none'){
+        ctx.lineJoin = state.radius === 'square' ? 'miter' : 'round';
+        ctx.strokeStyle = state.outline ? color : ring;
+        ctx.lineWidth = bw;
+        if(state.borderStyle === 'dashed'){
+          ctx.setLineDash([10, 8]);
+          ctx.lineCap = 'round';
+        } else if(state.borderStyle === 'dotted'){
+          ctx.setLineDash([3, 7]);
+          ctx.lineCap = 'round';
+        } else {
+          ctx.setLineDash([]);
+        }
+        ctx.stroke(p);
+        ctx.setLineDash([]);
+      }
       ctx.fillStyle = state.outline ? '#232738' : inkFor(color);
       ctx.font = `${F.weight} ${fontSize(cellData.n, s, cellData.globalIdx)}px '${F.family}'`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -1204,10 +1521,11 @@ function initMobileAndRangeControls(){
   $('#zoom100')?.addEventListener('click', () => setZoom('100'));
 
   // Range preset chips
-  document.querySelectorAll('.range-chip').forEach(chip => {
+  document.querySelectorAll('#rangePresets .range-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const f = parseInt(chip.dataset.from, 10);
       const t = parseInt(chip.dataset.to, 10);
+      if(isNaN(f) || isNaN(t)) return;
       state.from = f;
       state.to = t;
       $('#from').value = f;
@@ -1256,6 +1574,12 @@ $('#alt').addEventListener('change',e=>{state.alt=e.target.checked; render();});
 $('#guides').addEventListener('change',e=>{state.guides=e.target.checked; render();});
 $('#outline').addEventListener('change',e=>{state.outline=e.target.checked; render();});
 $('#dot').addEventListener('change',e=>{state.dot=e.target.checked; render();});
+$('#fillColumn')?.addEventListener('change', e => {
+  state.fillColumn = e.target.checked;
+  syncFillModeControls();
+  render();
+  toast(state.fillColumn ? 'Full sheet fill active' : 'Sheet fill turned off');
+});
 
 /* ---------- font size variation controls ---------- */
 function updateFsPresetSelection(){
@@ -1449,6 +1773,32 @@ function initMultControls(){
   });
 }
 
+/* ---------- fill mode controls ---------- */
+function setFillMode(mode){
+  if(mode !== 'continue' && mode !== 'restart') return;
+  state.fillMode = mode;
+  syncFillModeControls();
+  render();
+  toast(mode === 'continue' ? 'Continuation: next numbers (166, 167…) ➡️' : 'Continuation: restart from 1 (1, 2…) 🔄');
+}
+
+function syncFillModeControls(){
+  const wrap = $('#fillModeWrap');
+  const isFill = state.fillColumn ?? true;
+  if(wrap){
+    wrap.style.display = isFill ? 'grid' : 'none';
+  }
+  document.querySelectorAll('#fillModeWrap .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.fillmode === (state.fillMode || 'continue'));
+  });
+}
+
+function initFillModeControls(){
+  document.querySelectorAll('#fillModeWrap .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setFillMode(btn.dataset.fillmode));
+  });
+}
+
 /* ---------- sheet alignment controls ---------- */
 function setAlignment(align){
   if(state.align === align) return;
@@ -1470,20 +1820,126 @@ function initAlignmentControls(){
   });
 }
 
-$('#ampoulePreset').onclick=()=>{
-  Object.assign(state,{from:1, to:30, shape:'rect', size:14, gap:0, orientation:'horizontal', flow:'column',
-                       align:'left', multiply:1,
-                       outline:true, guides:true, alt:true, theme:'black', font:'Fredoka', fontScale:100, fontVariation:'uniform', dot:true});
-  $('#from').value=1; $('#to').value=30; $('#size').value=14;
-  if($('#sizeVal')) $('#sizeVal').textContent = '14 mm';
-  if($('#gapInput')) $('#gapInput').value = 0;
-  if($('#gapVal')) $('#gapVal').textContent = '0 mm';
-  if($('#multInput')) $('#multInput').value = 1;
-  if($('#multVal')) $('#multVal').textContent = '1× (Single)';
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets();
-  buildShapeTiles(); buildSwatches(); buildFonts(); render();
-  toast('Ampoule preset applied 🧪 14 mm size · 0 mm gap · down cols · 1. 2. 3.');
-};
+/* ---------- corner radius controls ---------- */
+function setRadius(r){
+  if(r !== 'square' && r !== 'rounded') return;
+  if(state.radius === r) return;
+  state.radius = r;
+  syncRadiusControls();
+  buildShapeTiles();
+  render();
+  toast(r === 'square' ? 'Sharp square corners ⬛' : 'Curved rounded corners ▢');
+}
+
+function syncRadiusControls(){
+  document.querySelectorAll('#radiusGroup .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.radius === (state.radius || 'rounded'));
+  });
+}
+
+function initRadiusControls(){
+  document.querySelectorAll('#radiusGroup .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setRadius(btn.dataset.radius));
+  });
+}
+
+/* ---------- border line & style controls ---------- */
+function setBorderWidth(w){
+  if(isNaN(w)) return;
+  w = Math.max(0, Math.min(14, Math.round(w)));
+  if(state.borderWidth === w) return;
+  state.borderWidth = w;
+  if($('#bwInput')) $('#bwInput').value = w;
+  if($('#bwVal')) $('#bwVal').textContent = w + ' px';
+  updateBwPresets();
+  render();
+}
+
+function updateBwPresets(){
+  const chips = document.querySelectorAll('#bwPresets .range-chip');
+  chips.forEach(chip => {
+    const bw = parseInt(chip.dataset.bw, 10);
+    chip.classList.toggle('sel', bw === state.borderWidth);
+  });
+}
+
+function setBorderStyle(style){
+  if(!['solid','dashed','dotted','none'].includes(style)) return;
+  if(state.borderStyle === style) return;
+  state.borderStyle = style;
+  syncBorderStyleControls();
+  render();
+  toast(`Line style set to ${style}`);
+}
+
+function syncBorderStyleControls(){
+  document.querySelectorAll('#bStyleGroup .dir-btn').forEach(btn => {
+    btn.classList.toggle('sel', btn.dataset.style === (state.borderStyle || 'solid'));
+  });
+}
+
+function initBorderControls(){
+  holdStep($('#bwMinus'), () => setBorderWidth((state.borderWidth ?? 6) - 1));
+  holdStep($('#bwPlus'), () => setBorderWidth((state.borderWidth ?? 6) + 1));
+
+  const bwIn = $('#bwInput');
+  if(bwIn){
+    bwIn.addEventListener('input', e => {
+      state.borderWidth = Math.max(0, Math.min(14, +e.target.value));
+      if($('#bwVal')) $('#bwVal').textContent = state.borderWidth + ' px';
+      updateBwPresets();
+      schedule();
+    });
+  }
+
+  document.querySelectorAll('#bwPresets .range-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const bw = parseInt(chip.dataset.bw, 10);
+      if(isNaN(bw)) return;
+      setBorderWidth(bw);
+    });
+  });
+
+  document.querySelectorAll('#bStyleGroup .dir-btn').forEach(btn => {
+    btn.addEventListener('click', () => setBorderStyle(btn.dataset.style));
+  });
+}
+
+function applyContainerPreset(name, size){
+  Object.assign(state, {
+    size: size,
+    gap: 0,
+    shape: 'rect',
+    radius: 'rounded',
+    orientation: 'horizontal',
+    flow: 'row',
+    align: 'left',
+    fillColumn: true,
+    fillMode: 'continue',
+    borderWidth: 6,
+    borderStyle: 'solid',
+    font: 'Bungee',
+    fontScale: 180,
+    fontVariation: 'uniform',
+    dot: true,
+    outline: true,
+    alt: false,
+    guides: true,
+    theme: 'black'
+  });
+  syncAllInputs();
+  buildShapeTiles();
+  buildSwatches();
+  buildFonts();
+  render();
+  toast(`${name} preset applied 🧪 ${size} mm · 0 gap · Across rows · Bungee 180% · 6px solid · outline · dot`);
+}
+
+$('#preset1mlAmpoule')?.addEventListener('click', () => applyContainerPreset('1 ml Ampoule', 6));
+$('#preset1mlVial')?.addEventListener('click', () => applyContainerPreset('1 ml Vial', 6));
+$('#preset10mlAmpoule')?.addEventListener('click', () => applyContainerPreset('10 ml Ampoule', 10));
+$('#preset10mlVial')?.addEventListener('click', () => applyContainerPreset('10 ml Vial', 10));
+$('#ampoulePreset')?.addEventListener('click', () => applyContainerPreset('1 ml Ampoule', 6));
 
 const triggerPrint = () => {
   toast('Opening print dialog — pick “Save as PDF” 🖨');
@@ -1495,16 +1951,11 @@ $('#pngBtn').onclick = () => downloadPNGs();
 
 $('#resetBtn').onclick=()=>{
   Object.assign(state, DEFAULTS);
-  $('#from').value=DEFAULTS.from; $('#to').value=DEFAULTS.to; $('#size').value=DEFAULTS.size;
-  if($('#sizeVal')) $('#sizeVal').textContent = DEFAULTS.size + ' mm';
-  if($('#gapInput')) $('#gapInput').value = DEFAULTS.gap;
-  if($('#gapVal')) $('#gapVal').textContent = DEFAULTS.gap + ' mm';
-  if($('#multInput')) $('#multInput').value = DEFAULTS.multiply;
-  if($('#multVal')) $('#multVal').textContent = '1× (Single)';
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
   setZoom('fit'); setMobileView('controls');
-  syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets();
+  syncAllInputs();
   buildShapeTiles(); buildSwatches(); buildFonts(); render();
-  toast('Back to defaults ✨ 14 mm size · 0 mm gap · down cols');
+  toast('Back to defaults ✨ 14 mm size · 0 mm gap · across rows');
 };
 
 document.getElementById('starDeco').setAttribute('d',starD());
@@ -1514,14 +1965,19 @@ document.getElementById('starDeco').setAttribute('stroke-width','6');
 document.getElementById('starDeco').setAttribute('stroke-linejoin','round');
 document.getElementById('logoStar').setAttribute('d',starD(50,31));
 
+loadState();
+syncAllInputs();
 initSizeControls();
+initRadiusControls();
+initBorderControls();
 initFontSizeControls();
 initMobileAndRangeControls();
 initGapControls();
 initDirectionControls();
 initMultControls();
+initFillModeControls();
 initAlignmentControls();
-buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); updateSizePresets(); updateGapPresets(); updateMultPresets(); render();
+buildShapeTiles(); buildSwatches(); buildFonts(); syncToggles(); syncFontSizeControls(); syncDirectionControls(); syncAlignmentControls(); syncRadiusControls(); syncBorderStyleControls(); syncFillModeControls(); updateSizePresets(); updateGapPresets(); updateMultPresets(); updateBwPresets(); render();
 </script>
 <div class="mobile-bar" id="mobileBar">
   <button type="button" class="m-bar-btn" id="mBarToggle">
